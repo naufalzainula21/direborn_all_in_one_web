@@ -13,16 +13,15 @@ npm run build    # production build into dist/
 npm run preview  # serve the production build
 ```
 
-## Deploy to Cloudflare Pages
+## Deploy to Cloudflare (Workers static assets)
 
-1. Cloudflare dashboard → **Workers & Pages** → **Create** → **Pages** → **Connect to Git** → choose this repo.
-2. Build settings:
-   - Framework preset: **Vite** (or None)
-   - Build command: `npm run build`
-   - Build output directory: `dist`
-3. Save and deploy. Every push to `main` redeploys automatically.
+The Worker is set up in the Cloudflare dashboard (Workers & Pages → connected to this repo):
 
-`public/_redirects` sends every path to `index.html` so future pages work on refresh.
+- Build command: `npm run build`
+- Deploy command: `npx wrangler deploy`
+- Root directory: `/`
+
+`wrangler.jsonc` tells Wrangler to publish `dist/` and to serve `index.html` for any unknown path, so future pages work on refresh. Every push to `main` redeploys automatically.
 
 ## Add to the iPhone home screen
 
