@@ -1,0 +1,37 @@
+/* Direborn design tokens — taken from the team logo. */
+:root {
+  /* Brand */
+  --red: #d81f28;        /* Dire red: primary actions, today, tournaments */
+  --maroon: #90262c;     /* Blood maroon: hero banner, hover */
+  --gold: #c29f42;       /* Aegis gold: highlight cards and badges */
+  --bronze: #bd892c;     /* Gold shade */
+  --gold-text: #8a6418;  /* Gold that is readable on white */
+  --gold-ink: #2a1e08;   /* Text on gold fills */
+  --gold-soft: #f0cf7a;  /* Gold on maroon */
+
+  /* Neutrals */
+  --page: #f4f1ec;
+  --surface: #ffffff;
+  --surface-soft: #faf8f5;
+  --border: #e7e1d9;
+  --divider: #f0ebe4;
+  --text: #1a1416;
+  --muted: #6e635e;
+  --faint: #a69c96;
+
+  /* Status: background / text pairs */
+  --win-bg: #e3f5ea;   --win: #1e7a45;   --win-bar: #3dbe72;
+  --loss-bg: #fde8e9;  --loss: #b3141c;
+  --scrim-bg: #e6f0fc; --scrim: #1f5fa8; --scrim-dot: #4f9be8;
+  --review-bg: #f8f0dc; --review: #7a5a12;
+  --neutral-bg: #f0ebe4; --neutral: #5a504b;
+
+  /* Type */
+  --font-display: 'Chakra Petch', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+
+  /* Shape */
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 16px;
+}
