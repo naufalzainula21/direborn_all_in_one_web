@@ -2,6 +2,8 @@ import { useMemo, useState } from 'react'
 import { useEvents } from '../data/events'
 import { TournamentDialog } from '../components/tournaments/TournamentDialog'
 import { NextMatchCard } from '../components/tournaments/NextMatchCard'
+import { TournamentTabs } from '../components/tournaments/TournamentTabs'
+import { Link } from 'react-router-dom'
 import { parseDay, todayISO } from '../lib/format'
 import { startISO } from '../lib/schedule'
 import {
@@ -46,6 +48,7 @@ export function Tournaments({ now }: { now: Date }) {
         <span className="muted">Official matches · data from OpenDota, Hawk Live and E-Rankings</span>
         <h1 className="page-title">Tournaments</h1>
       </div>
+      <TournamentTabs />
 
       <section aria-label="Season summary" className="tiles">
         <div className="tile"><span className="tile__label">Tournaments</span><span className="tile__value">{pastTournaments.length + 1}</span><span className="tile__detail">Since June 2026</span></div>
@@ -128,7 +131,10 @@ export function Tournaments({ now }: { now: Date }) {
 
         <div className="stack">
           <section className="card" aria-labelledby="next-title">
-            <h2 id="next-title" className="card__title">Next up</h2>
+            <div className="card__head">
+              <h2 id="next-title" className="card__title">Next up</h2>
+              <Link to="/tournaments/upcoming" className="link">All 2026–27 →</Link>
+            </div>
             <NextMatchCard now={now} />
             <ul className="upcoming">
               {upcoming.map((u) => (

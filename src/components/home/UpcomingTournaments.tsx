@@ -8,7 +8,7 @@ export function UpcomingTournaments({ now }: { now: Date }) {
     <section className="card" aria-labelledby="up-title">
       <div className="card__head">
         <h2 id="up-title" className="card__title">Upcoming tournaments</h2>
-        <Link to="/tournaments" className="link">All →</Link>
+        <Link to="/tournaments/upcoming" className="link">All →</Link>
       </div>
       <NextMatchCard now={now} />
       <ul className="upcoming">

@@ -19,7 +19,7 @@ function NavItemLink({ item, className, iconSize }: { item: NavItem; className: 
     )
   }
   return (
-    <NavLink to={item.path} end className={({ isActive }) => `${className}${isActive ? ' is-active' : ''}`}>
+    <NavLink to={item.path} end={item.path === '/'} className={({ isActive }) => `${className}${isActive ? ' is-active' : ''}`}>
       {content}
     </NavLink>
   )
