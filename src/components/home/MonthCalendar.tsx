@@ -167,7 +167,7 @@ export function MonthCalendar({ events, today }: { events: CalendarEvent[]; toda
               )}
             </div>
             <footer className="sheet__foot">
-              <button type="button" className="ghost-btn" onClick={addFromDay}>+ Add event on this day</button>
+              <button type="button" className="ghost-btn staff-only" onClick={addFromDay}>+ Add event on this day</button>
               <button type="button" className="btn btn--primary" onClick={() => setDayOpen(false)}>Done</button>
             </footer>
           </div>

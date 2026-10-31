@@ -180,7 +180,7 @@ function DayView({ date, events }: { date: string; events: CalendarEvent[] }) {
   }
 
   const addButton = (
-    <button type="button" className="ghost-btn day-list__add" onClick={() => openAdd(date)}>+ Add event on this day</button>
+    <button type="button" className="ghost-btn day-list__add staff-only" onClick={() => openAdd(date)}>+ Add event on this day</button>
   )
 
   if (events.length === 0) {
@@ -207,9 +207,11 @@ function DayView({ date, events }: { date: string; events: CalendarEvent[] }) {
           <span className={`badge badge--type-${e.type}`}>{TYPE_LABEL[e.type]}</span>
           <button type="button" className="ghost-btn day-list__summary" onClick={() => openEvent(e)}>Details</button>
           {source === 'db' && !e.source && (
+            <span className="staff-only">
             <button type="button" className="icon-btn icon-btn--sm" aria-label={`Delete ${e.title}`} disabled={busy === e.id} onClick={() => onDelete(e)}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" /></svg>
             </button>
+            </span>
           )}
         </li>
       ))}

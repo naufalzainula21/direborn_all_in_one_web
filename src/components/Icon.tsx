@@ -27,6 +27,21 @@ const paths = {
       <path d="M2.5 20c.8-3.5 3.4-5.5 6.5-5.5s5.7 2 6.5 5.5M16 4.5a3.5 3.5 0 0 1 0 7M18 14.8c1.8.7 3 2.4 3.5 5.2" />
     </>
   ),
+  gamepad: (
+    <>
+      <path d="M7 8h10a5 5 0 0 1 4.9 6l-.5 2.4a2.5 2.5 0 0 1-4.3 1.2L15 15.5H9l-2.1 2.1a2.5 2.5 0 0 1-4.3-1.2L2.1 14A5 5 0 0 1 7 8z" />
+      <path d="M8 10.5v3M6.5 12h3M15.5 11.5h.01M17.5 13h.01" />
+    </>
+  ),
+  clipboard: (
+    <>
+      <rect x="5" y="4" width="14" height="17" rx="2" />
+      <path d="M9 4V3h6v1M9 10h6M9 14h6M9 18h3" />
+    </>
+  ),
+  sparkle: <path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z" />,
+  chevronDown: <path d="M6 9l6 6 6-6" />,
+  check: <path d="M5 12.5l4.5 4.5L19 7" />,
   plus: <path d="M12 5v14M5 12h14" />,
   chevronLeft: <path d="M15 6l-6 6 6 6" />,
   chevronRight: <path d="M9 6l6 6-6 6" />,

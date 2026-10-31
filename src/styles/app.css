@@ -920,3 +920,84 @@ button { font: inherit; }
 .facts__label { font-family: var(--font-display); text-transform: uppercase; letter-spacing: .04em; font-size: 11px; font-weight: 600; color: var(--muted); }
 .match-score.is-draw { color: var(--muted); }
 .side-list__item--btn:disabled { cursor: default; }
+
+/* ---------- Roles ---------- */
+[data-role="player"] .staff-only { display: none !important; }
+.btn--outline { background: var(--surface); color: var(--text); box-shadow: inset 0 0 0 1px var(--border); }
+.btn--outline:hover { background: var(--surface-soft); }
+.link--btn { border: 0; background: none; cursor: pointer; color: var(--red); padding: 4px 0; font-family: inherit; }
+.c-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.role-avatar--player { background: var(--scrim-bg); color: var(--scrim); }
+.role-avatar--staff { background: var(--review-bg); color: var(--review); }
+.role-avatar--creative { background: var(--loss-bg); color: var(--maroon); }
+
+/* Role picker (first screen) */
+.role-picker { min-height: 100vh; min-height: 100dvh; display: flex; align-items: center; justify-content: center; padding: 32px 16px calc(32px + env(safe-area-inset-bottom)); background: var(--page); }
+.role-picker__inner { width: 100%; max-width: 520px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; }
+.role-picker__logo { height: 64px; }
+.role-picker__brand { font-size: 18px; }
+.role-picker__sub { color: var(--gold-text); font-size: 12px; letter-spacing: .14em; margin-left: 6px; }
+.role-picker__title { margin: 18px 0 0; font-family: var(--font-display); font-size: 28px; text-transform: uppercase; }
+.role-picker__lead { margin: 0 0 12px; max-width: 400px; }
+.role-picker__list { list-style: none; margin: 0; padding: 0; width: 100%; display: flex; flex-direction: column; gap: 10px; }
+.role-card { width: 100%; display: flex; align-items: center; gap: 14px; padding: 16px; text-align: left; font: inherit; color: inherit; cursor: pointer;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 14px; transition: border-color .15s, transform .15s; }
+.role-card:hover { border-color: var(--red); }
+.role-card:active { transform: scale(.99); }
+.role-card:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+.role-card__icon { flex: none; width: 52px; height: 52px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+.role-card--player .role-card__icon { background: var(--scrim-bg); color: var(--scrim); }
+.role-card--staff .role-card__icon { background: var(--review-bg); color: var(--review); }
+.role-card--creative .role-card__icon { background: var(--loss-bg); color: var(--maroon); }
+.role-card__text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.role-card__label { font-family: var(--font-display); font-weight: 700; font-size: 17px; text-transform: uppercase; }
+.role-card__go { color: var(--muted); flex: none; }
+
+/* Role switcher (top right) */
+.role-switch { position: relative; }
+.role-switch__btn { display: flex; align-items: center; gap: 10px; border: 0; background: transparent; padding: 4px 6px 4px 4px; border-radius: 999px; cursor: pointer; font: inherit; color: inherit; text-align: left; }
+.role-switch__btn:hover { background: var(--surface-soft); }
+.role-switch__btn:focus-visible { outline: 2px solid var(--red); }
+.role-switch__chev { color: var(--muted); }
+.role-switch__menu { position: absolute; right: 0; top: calc(100% + 8px); z-index: 30; width: min(340px, calc(100vw - 24px));
+  background: var(--surface); border: 1px solid var(--border); border-radius: 14px; box-shadow: 0 12px 32px rgba(26, 20, 22, .14); padding: 8px; display: flex; flex-direction: column; gap: 2px; }
+.role-switch__heading { font-family: var(--font-display); text-transform: uppercase; letter-spacing: .06em; font-size: 11px; font-weight: 600; color: var(--muted); padding: 6px 10px; }
+.role-switch__item { display: flex; align-items: center; gap: 12px; padding: 10px; border: 0; border-radius: 10px; background: transparent; text-align: left; font: inherit; color: inherit; cursor: pointer; }
+.role-switch__item:hover { background: var(--surface-soft); }
+.role-switch__item.is-active { background: var(--page); }
+.role-switch__icon { flex: none; width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+.role-switch__text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.role-switch__label { font-weight: 600; font-size: 14px; }
+.role-switch__check { color: var(--red); flex: none; }
+@media (max-width: 760px) { .role-switch__chev { display: none; } .role-switch__btn { padding: 0; } }
+
+/* Player home: compact, one column */
+.p-home { width: 100%; max-width: 720px; display: flex; flex-direction: column; gap: 16px; }
+.p-next { display: flex; flex-direction: column; gap: 6px; padding: 22px 24px; border: 0; border-radius: var(--radius-lg); background: var(--maroon); color: #fff; text-align: left; font: inherit; cursor: pointer; }
+.p-next--scrim { background: #1F5FA8; }
+.p-next--practice { background: #7A5A12; }
+.p-next--other { background: #4a3f3b; }
+.p-next--empty { background: var(--surface); color: var(--text); border: 1px dashed var(--border); cursor: default; }
+.p-next__eyebrow { font-family: var(--font-display); font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; opacity: .85; }
+.p-next__title { font-family: var(--font-display); font-size: 30px; font-weight: 700; line-height: 1.05; text-transform: uppercase; }
+.p-next__meta { font-size: 15px; opacity: .9; }
+.p-next__count { align-self: flex-start; margin-top: 6px; font-size: 13px; font-weight: 600; background: #fff; color: var(--text); padding: 6px 12px; border-radius: 8px; }
+.p-card { gap: 8px; }
+.p-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.p-row { width: 100%; display: flex; align-items: center; gap: 12px; padding: 10px 4px; min-height: 52px; border: 0; border-bottom: 1px solid var(--divider); background: transparent; text-align: left; font: inherit; color: inherit; cursor: pointer; }
+.p-list li:last-child .p-row { border-bottom: 0; }
+.p-row:hover { background: var(--surface-soft); }
+.p-row__time { width: 52px; flex: none; font-family: var(--font-display); font-size: 17px; font-weight: 700; }
+.p-dot { flex: none; width: 10px; height: 10px; border-radius: 50%; }
+.p-dot--tournament { background: var(--red); }
+.p-dot--scrim { background: var(--scrim); }
+.p-dot--practice { background: var(--review); }
+.p-dot--other { background: #8c817b; }
+.p-row__text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.p-row__title { font-weight: 600; font-size: 15px; }
+.p-day + .p-day { margin-top: 8px; }
+.p-day__head { margin: 4px 0 0; font-family: var(--font-display); font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.p-results { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.p-results__row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.p-results__text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+@media (max-width: 760px) { .p-next { padding: 18px; } .p-next__title { font-size: 24px; } }

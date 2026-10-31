@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useEvents } from '../../data/events'
+import { useRole } from '../../lib/role'
 import { countdown, parseDay } from '../../lib/format'
 import { TYPE_LABEL } from '../schedule/meta'
 import { dotabuffMatch } from '../../data/tournaments'
@@ -8,6 +9,8 @@ import { hasResult, isPast, outcomeOf, OUTCOME_LABEL, OUTCOME_TONE } from '../..
 /** Details for a team-added event (scrim, practice, other, tournament). */
 export function EventDialog() {
   const { eventDetail: e, closeEvent, remove, source, openAdd, openResult, update } = useEvents()
+  const { role } = useRole()
+  const canEdit = source === 'db' && role !== 'player'
   const ref = useRef<HTMLDialogElement>(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
@@ -38,7 +41,7 @@ export function EventDialog() {
   ] : []
   const isScrim = e?.type === 'scrim'
   const outcome = e ? outcomeOf(e) : null
-  const canResult = !!e && isScrim && source === 'db' && (hasResult(e) || isPast(e, new Date()))
+  const canResult = !!e && isScrim && canEdit && (hasResult(e) || isPast(e, new Date()))
   const confirm = async () => {
     if (!e) return
     setBusy(true); setError('')
@@ -83,10 +86,10 @@ export function EventDialog() {
             {error && <p className="field__error" role="alert">{error}</p>}
           </div>
           <footer className="sheet__foot">
-            {source === 'db' && (
+            {canEdit && (
               <button type="button" className="ghost-btn ghost-btn--danger" disabled={busy} onClick={onDelete}>{busy ? 'Deleting…' : 'Delete'}</button>
             )}
-            {isScrim && e.status === 'pending' && source === 'db' && !hasResult(e) && (
+            {isScrim && e.status === 'pending' && canEdit && !hasResult(e) && (
               <button type="button" className="ghost-btn" disabled={busy} onClick={confirm}>Mark confirmed</button>
             )}
             {canResult ? (
@@ -95,7 +98,7 @@ export function EventDialog() {
               </button>
             ) : (
               <>
-                <button type="button" className="ghost-btn" onClick={() => { const d = e.date; closeEvent(); openAdd(d) }}>Add on this day</button>
+                <button type="button" className="ghost-btn staff-only" onClick={() => { const d = e.date; closeEvent(); openAdd(d) }}>Add on this day</button>
                 <button type="button" className="btn btn--primary" onClick={closeEvent}>Done</button>
               </>
             )}

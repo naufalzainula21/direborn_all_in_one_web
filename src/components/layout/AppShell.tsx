@@ -3,6 +3,8 @@ import { Link, NavLink } from 'react-router-dom'
 import { useEvents } from '../../data/events'
 import { Icon } from '../Icon'
 import { navItems, type NavItem } from './nav'
+import { RoleSwitcher } from './RoleSwitcher'
+import { roleInfo, useRole } from '../../lib/role'
 
 function NavItemLink({ item, className, iconSize }: { item: NavItem; className: string; iconSize: number }) {
   const content = (
@@ -27,8 +29,11 @@ function NavItemLink({ item, className, iconSize }: { item: NavItem; className: 
 
 export function AppShell({ children }: { children: ReactNode }) {
   const { openAdd } = useEvents()
+  const { role } = useRole()
+  const info = roleInfo(role ?? 'staff')
+  const items = navItems.filter((i) => info.nav.includes(i.id))
   return (
-    <div className="app">
+    <div className={`app app--${info.id}`}>
       <header className="topbar">
         <div className="topbar__inner">
           <Link to="/" className="brand">
@@ -45,17 +50,13 @@ export function AppShell({ children }: { children: ReactNode }) {
           </div>
 
           <div className="topbar__actions">
-            <button type="button" className="btn btn--primary" onClick={() => openAdd()} aria-label="Add event">
-              <Icon name="plus" size={16} strokeWidth={2.4} />
-              <span className="btn__label">Add event</span>
-            </button>
-            <div className="user">
-              <span className="user__avatar">NZ</span>
-              <span className="user__meta">
-                <span className="user__name">Manager</span>
-                <span className="badge badge--gold">Admin</span>
-              </span>
-            </div>
+            {info.canAdd && (
+              <button type="button" className="btn btn--primary" onClick={() => openAdd()} aria-label="Add event">
+                <Icon name="plus" size={16} strokeWidth={2.4} />
+                <span className="btn__label">Add event</span>
+              </button>
+            )}
+            <RoleSwitcher />
           </div>
         </div>
       </header>
@@ -63,7 +64,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <div className="shell">
         <aside className="sidebar">
           <nav aria-label="Main">
-            {navItems.map((item) => (
+            {items.map((item) => (
               <NavItemLink key={item.id} item={item} className="sidebar__link" iconSize={18} />
             ))}
           </nav>
@@ -73,7 +74,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       </div>
 
       <nav className="tabbar" aria-label="Main">
-        {navItems.map((item) => (
+        {items.map((item) => (
           <NavItemLink key={item.id} item={item} className="tabbar__link" iconSize={22} />
         ))}
       </nav>

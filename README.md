@@ -45,6 +45,18 @@ By default anyone with the link can add or delete events. To require a code: Clo
 
 POST, PATCH and DELETE need `X-Team-Key` when `TEAM_KEY` is set.
 
+## Views by role
+
+The first screen asks who is using the app; switch any time from the top-right menu. The choice is saved on the device.
+
+| Role | Home page | Menu |
+|---|---|---|
+| Player | Up next, today, next 7 days, latest results. No editing | Home, Schedule |
+| Coach & management | Full dashboard | Home, Schedule, Scrims, Tournaments |
+| Creative team | Content queue (posters, match-day, result posts, activities), tournament + activity calendar | Home, Schedule, Tournaments |
+
+Roles change what each screen shows, not who can save: saving still needs the team code.
+
 ## Add to the iPhone home screen
 
 Open the site in Safari → Share → **Add to Home Screen**. The app uses the Direborn logo as its icon and opens full screen without the Safari bar.

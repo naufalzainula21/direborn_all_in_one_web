@@ -13,7 +13,7 @@ export function NextMatchBanner({ match, now }: { match?: CalendarEvent; now: Da
           <span className="hero__eyebrow">Next match</span>
           <h2 className="hero__title">No tournament match scheduled</h2>
         </div>
-        <button type="button" className="hero__countdown hero__action" onClick={() => openAdd()}>Add event</button>
+        <button type="button" className="hero__countdown hero__action staff-only" onClick={() => openAdd()}>Add event</button>
       </section>
     )
   }
