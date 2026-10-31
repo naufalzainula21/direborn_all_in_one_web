@@ -22,7 +22,7 @@ export function Home({ now }: { now: Date }) {
           <RecentMatches />
         </div>
         <div className="stack">
-          <UpcomingTournaments />
+          <UpcomingTournaments now={now} />
         </div>
       </div>
     </>

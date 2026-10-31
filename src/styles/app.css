@@ -773,3 +773,6 @@ button { font: inherit; }
   .match-row__date { width: 44px; }
   .match-row__chev { display: none; }
 }
+.feature--btn { width: 100%; border: 0; text-align: left; font: inherit; cursor: pointer; }
+.feature--btn:hover { filter: brightness(1.04); }
+.feature--btn:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }

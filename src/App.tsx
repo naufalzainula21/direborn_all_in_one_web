@@ -24,7 +24,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Home now={now} />} />
             <Route path="/schedule" element={<Schedule now={now} />} />
-            <Route path="/tournaments" element={<Tournaments />} />
+            <Route path="/tournaments" element={<Tournaments now={now} />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </AppShell>

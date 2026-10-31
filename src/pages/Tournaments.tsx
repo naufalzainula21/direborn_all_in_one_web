@@ -1,13 +1,16 @@
 import { useMemo, useState } from 'react'
 import { useEvents } from '../data/events'
 import { TournamentDialog } from '../components/tournaments/TournamentDialog'
+import { NextMatchCard } from '../components/tournaments/NextMatchCard'
+import { parseDay, todayISO } from '../lib/format'
+import { startISO } from '../lib/schedule'
 import {
-  bestFinish, calendar, nextMatch, pastTournaments, podiums, running, runningSeries, seriesFor, upcoming,
+  bestFinish, calendar, pastTournaments, podiums, running, runningSeries, seriesFor, upcoming,
   type TournamentInfo,
 } from '../data/tournaments'
 
-export function Tournaments() {
-  const { games, series, openMatch } = useEvents()
+export function Tournaments({ now }: { now: Date }) {
+  const { games, series, openMatch, events } = useEvents()
   const [open, setOpen] = useState<TournamentInfo | null>(null)
   const s19 = series.filter((s) => s.tourKey === 'EPL S19')
 
@@ -19,6 +22,21 @@ export function Tournaments() {
     }),
     [games],
   )
+  // Calendar = upcoming tournament events from the shared schedule, then announced dates and estimates
+  const today = todayISO(now)
+  const calendarItems = [
+    ...events.filter((e) => e.type === 'tournament' && e.date >= today && new Date(startISO(e)).getTime() >= now.getTime() - 3 * 3600 * 1000).map((e) => {
+      const d = parseDay(e.date)
+      return {
+        key: e.id, dated: true, seriesKey: e.seriesKey,
+        mon: d.toLocaleDateString('en-GB', { month: 'short' }), day: String(d.getDate()),
+        title: e.opponent ? `${e.title} · vs ${e.opponent}` : e.title,
+        sub: e.time === 'TBD' ? 'Time TBC' : `${e.time} WIB`,
+      }
+    }),
+    ...calendar.filter((c) => !c.next).map((c) => ({ key: c.title, dated: false, seriesKey: undefined, mon: c.mon, day: c.day, title: c.title, sub: c.sub })),
+  ]
+
   const seriesW = cards.reduce((n, c) => n + c.w, 0) + runningSeries.w
   const seriesL = cards.reduce((n, c) => n + c.l, 0) + runningSeries.l
 
@@ -111,11 +129,7 @@ export function Tournaments() {
         <div className="stack">
           <section className="card" aria-labelledby="next-title">
             <h2 id="next-title" className="card__title">Next up</h2>
-            <div className="feature feature--col">
-              <span className="feature__meta">{nextMatch.label}</span>
-              <span className="feature__name">{nextMatch.title}</span>
-              <span className="feature__meta">{nextMatch.detail}</span>
-            </div>
+            <NextMatchCard now={now} />
             <ul className="upcoming">
               {upcoming.map((u) => (
                 <li key={u.name} className="upcoming__item upcoming__item--col">
@@ -133,16 +147,19 @@ export function Tournaments() {
           <section className="card" aria-labelledby="cal-title2">
             <h2 id="cal-title2" className="card__title">Tournament calendar</h2>
             <ul className="side-list">
-              {calendar.map((c) => (
-                <li key={c.title} className="side-list__item">
-                  <span className={`date-box date-box--sm${c.next ? ' is-today' : ''}`}>
-                    <span className="date-box__dow">{c.mon}</span>
-                    <span className="date-box__num">{c.day}</span>
-                  </span>
-                  <span className="side-list__text">
-                    <span className="side-list__title side-list__title--display">{c.title}</span>
-                    <span className="muted small">{c.sub}</span>
-                  </span>
+              {calendarItems.map((c, i) => (
+                <li key={c.key}>
+                  <button type="button" className="side-list__item side-list__item--btn" disabled={!c.seriesKey}
+                    onClick={() => c.seriesKey && openMatch(c.seriesKey)}>
+                    <span className={`date-box date-box--sm${i === 0 && c.dated ? ' is-today' : ''}`}>
+                      <span className="date-box__dow">{c.mon}</span>
+                      <span className="date-box__num">{c.day}</span>
+                    </span>
+                    <span className="side-list__text">
+                      <span className="side-list__title side-list__title--display">{c.title}</span>
+                      <span className="muted small">{c.sub}</span>
+                    </span>
+                  </button>
                 </li>
               ))}
             </ul>
