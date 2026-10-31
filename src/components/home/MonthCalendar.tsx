@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import type { CalendarEvent, EventType } from '../../data/types'
 import { parseDay, toISODate } from '../../lib/format'
 import { Icon } from '../Icon'
@@ -29,7 +29,21 @@ export function MonthCalendar({ events, today }: { events: CalendarEvent[]; toda
   const todayIso = toISODate(today)
   const [view, setView] = useState({ year: today.getFullYear(), month: today.getMonth() })
   const [selected, setSelected] = useState(todayIso)
-  const { openEvent } = useEvents()
+  const [dayOpen, setDayOpen] = useState(false)
+  const { openEvent, openAdd } = useEvents()
+  const dialogRef = useRef<HTMLDialogElement>(null)
+
+  useEffect(() => {
+    const el = dialogRef.current
+    if (!el) return
+    if (dayOpen && !el.open) el.showModal()
+    else if (!dayOpen && el.open) el.close()
+  }, [dayOpen])
+
+  const pickDay = (iso: string) => { setSelected(iso); setDayOpen(true) }
+  // Close the day popup first so the detail popup sits on its own
+  const openFromDay = (e: CalendarEvent) => { setDayOpen(false); openEvent(e) }
+  const addFromDay = () => { setDayOpen(false); openAdd(selected) }
 
   const byDate = useMemo(() => {
     const map = new Map<string, CalendarEvent[]>()
@@ -90,7 +104,7 @@ export function MonthCalendar({ events, today }: { events: CalendarEvent[]; toda
               type="button"
               role="gridcell"
               className={classes}
-              onClick={() => setSelected(cell.iso)}
+              onClick={() => pickDay(cell.iso)}
               aria-label={`${cell.day}${isToday ? ', today' : ''}${dayEvents.length ? `, ${dayEvents.length} event${dayEvents.length > 1 ? 's' : ''}` : ''}`}
             >
               <span className="day__num">
@@ -118,28 +132,47 @@ export function MonthCalendar({ events, today }: { events: CalendarEvent[]; toda
         })}
       </div>
 
-      <div className="calendar__agenda" aria-live="polite">
-        <h3 className="calendar__agenda-title">{selectedLabel}</h3>
-        {selectedEvents.length === 0 ? (
-          <p className="muted">No events. Rest day.</p>
-        ) : (
-          <ul className="agenda">
-            {selectedEvents.map((e) => (
-              <li key={e.id}>
-                <button type="button" className="agenda__item agenda__item--btn" onClick={() => openEvent(e)}>
-                  <span className="agenda__time">{e.time === 'TBD' ? 'TBD' : e.time}</span>
-                  <span className={`dot dot--lg dot--${e.type}`} />
-                  <span className="agenda__text">
-                    <span className="agenda__title">{e.opponent && e.type !== 'scrim' ? `${e.title} · vs ${e.opponent}` : e.title}</span>
-                    <span className="muted small">{e.detail}</span>
-                  </span>
-                  <span className={`chip chip--${e.type}`}>{AGENDA_LABEL[e.type]}</span>
-                </button>
-              </li>
-            ))}
-          </ul>
+      <dialog ref={dialogRef} className="sheet" aria-labelledby="day-title" onClose={() => setDayOpen(false)} onCancel={() => setDayOpen(false)}>
+        {dayOpen && (
+          <div className="sheet__form">
+            <header className="sheet__head">
+              <div className="tour-head">
+                <span className="muted small">{selected === todayIso ? 'Today' : `${selectedEvents.length} ${selectedEvents.length === 1 ? 'event' : 'events'}`}</span>
+                <h2 id="day-title" className="sheet__title">{selectedLabel}</h2>
+              </div>
+              <button type="button" className="icon-btn" aria-label="Close" onClick={() => setDayOpen(false)}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+              </button>
+            </header>
+            <div className="sheet__body">
+              {selectedEvents.length === 0 ? (
+                <p className="muted">Nothing scheduled. Rest day.</p>
+              ) : (
+                <ul className="agenda">
+                  {selectedEvents.map((e) => (
+                    <li key={e.id}>
+                      <button type="button" className="agenda__item agenda__item--btn" onClick={() => openFromDay(e)}>
+                        <span className="agenda__time">{e.time === 'TBD' ? 'TBD' : e.time}</span>
+                        <span className={`dot dot--lg dot--${e.type}`} />
+                        <span className="agenda__text">
+                          <span className="agenda__title">{e.opponent && e.type !== 'scrim' ? `${e.title} · vs ${e.opponent}` : e.title}</span>
+                          <span className="muted small">{e.detail}</span>
+                        </span>
+                        <span className={`chip chip--${e.type}`}>{AGENDA_LABEL[e.type]}</span>
+                        <Icon name="chevronRight" size={16} className="match-row__chev" />
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            <footer className="sheet__foot">
+              <button type="button" className="ghost-btn" onClick={addFromDay}>+ Add event on this day</button>
+              <button type="button" className="btn btn--primary" onClick={() => setDayOpen(false)}>Done</button>
+            </footer>
+          </div>
         )}
-      </div>
+      </dialog>
     </section>
   )
 }

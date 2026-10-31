@@ -815,3 +815,4 @@ button { font: inherit; }
 .today-card__title { font-family: var(--font-display); text-transform: uppercase; letter-spacing: .04em; }
 .week-day .chip--btn { white-space: normal; overflow: visible; line-height: 1.35; }
 .tour-head .badge { align-self: flex-start; }
+@media (max-width: 760px) { .sheet .agenda__item--btn .chip { display: none; } }
