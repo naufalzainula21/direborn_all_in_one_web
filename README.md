@@ -66,9 +66,13 @@ src/
   components/schedule/     Today card, day/week/month browser, side lists
   pages/Home.tsx           Home page (/)
   pages/Schedule.tsx       Schedule page (/schedule)
+  pages/Tournaments.tsx    Tournaments page (/tournaments): running event, past results, popup with highlights and scoreboards
+  data/tournaments.ts      Tournament list, EPL S19 standings, upcoming, helpers
+  components/tournaments/  Tournament popup and match scoreboard
 worker/
   index.ts                 API Worker (D1) + static assets
 public/
+  data/direborn-games.json Official games from OpenDota (team 10150434): scoreboards, items, drafts
   logo.png, favicon.png, icons/, manifest.webmanifest
 ```
 
@@ -88,4 +92,6 @@ public/
 
 - Edit existing events
 - Results: record scrim and tournament scores
-- Scrims, Tournaments and Roster pages
+- Nightly sync: new official games from OpenDota, SEA qualifiers from Liquipedia API
+- Scrims and Roster pages
+- Team stats page

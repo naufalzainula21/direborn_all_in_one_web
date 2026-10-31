@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import type { UpcomingTournament } from '../../data/types'
 import { parseDay, shortDate } from '../../lib/format'
 import { Icon } from '../Icon'
@@ -15,7 +16,7 @@ export function UpcomingTournaments({ items, today }: { items: UpcomingTournamen
     <section className="card" aria-labelledby="up-title">
       <div className="card__head">
         <h2 id="up-title" className="card__title">Upcoming tournaments</h2>
-        <a href="#tournaments" className="link">All →</a>
+        <Link to="/tournaments" className="link">All →</Link>
       </div>
 
       {featured && (

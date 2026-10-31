@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import type { Placement, ScrimOutcome, ScrimResult, TournamentResult } from '../../data/types'
 import { shortDate } from '../../lib/format'
 
@@ -32,7 +33,7 @@ export function TournamentResults({ results }: { results: TournamentResult[] }) 
           <h2 id="tres-title" className="card__title">Tournament results</h2>
           <Record wins={wins} losses={losses} />
         </div>
-        <a href="#tournaments" className="link">All tournaments →</a>
+        <Link to="/tournaments" className="link">All tournaments →</Link>
       </div>
       <div className="table-wrap">
         <table className="table">
