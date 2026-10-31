@@ -1,11 +1,16 @@
 export type EventType = 'scrim' | 'tournament' | 'review'
 
+export type BookingStatus = 'confirmed' | 'pending' | 'played'
+
 export interface CalendarEvent {
   id: string
   date: string // YYYY-MM-DD
-  time: string // HH:mm, WIB
+  time: string // HH:mm in WIB, or 'TBD'
   type: EventType
-  title?: string
+  title: string // "Scrim vs [Opponent A]", "[Tournament A]", "VOD review"
+  detail: string // "Bo3", "Group stage R1 vs [Opponent] · Bo3"
+  opponent?: string
+  status?: BookingStatus // scrims only
 }
 
 export type ScrimOutcome = 'win' | 'loss' | 'draw'

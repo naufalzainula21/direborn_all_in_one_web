@@ -1,5 +1,6 @@
 // Placeholder data for the prototype. Replace with real data once storage is added.
 import type {
+  BookingStatus,
   CalendarEvent,
   EventType,
   NextMatch,
@@ -8,45 +9,93 @@ import type {
   UpcomingTournament,
 } from './types'
 
-const october: Record<number, string[]> = {
-  1: ['s19'], 2: ['s19'], 3: ['t19'], 4: ['r15'],
-  6: ['s19'], 7: ['s19'], 9: ['s19'], 10: ['t19'], 11: ['r15'],
-  13: ['s19'], 14: ['s18', 's21'], 16: ['s19'], 17: ['t19'],
-  19: ['s19'], 20: ['s19'], 22: ['s19'], 23: ['s19'], 24: ['s20'], 25: ['t19'],
-  26: ['s19'], 27: ['s19', 'r22'], 29: ['s18', 's21'], 30: ['s20'], 31: ['t19'],
-}
-
-const november: Record<number, string[]> = {
-  1: ['r15'], 3: ['s19'], 4: ['s19'], 6: ['s20'], 7: ['t19'], 8: ['r15'],
-  10: ['s19'], 11: ['s19'], 13: ['s19'], 14: ['t18'],
-}
-
+const pad = (n: number) => String(n).padStart(2, '0')
 const typeByCode: Record<string, EventType> = { s: 'scrim', t: 'tournament', r: 'review' }
+const opponents = ['[Opponent A]', '[Opponent B]', '[Opponent C]', '[Opponent D]', '[Opponent E]', '[Opponent F]']
 
-function expand(year: number, month: number, plan: Record<number, string[]>): CalendarEvent[] {
-  return Object.entries(plan).flatMap(([day, codes]) =>
-    codes.map((code, i) => {
-      const date = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
-      return {
-        id: `${date}-${i}`,
-        date,
-        time: `${code.slice(1).padStart(2, '0')}:00`,
-        type: typeByCode[code[0]],
+// October: past events, generated from a compact plan (s=scrim, t=tournament, r=review + hour).
+const octoberPlan: Record<number, string> = {
+  1: 's19', 2: 's19', 3: 't19', 4: 'r15', 6: 's19', 7: 's19', 9: 's19', 10: 't19', 11: 'r15',
+  13: 's19', 14: 's18 s21', 16: 's19', 17: 't19', 19: 's19', 20: 's19', 22: 's19', 23: 's19',
+  24: 's20', 25: 't19', 26: 's19', 27: 's19 r22', 29: 's18 s21', 30: 's20',
+}
+const octoberTournaments: Record<number, [string, string]> = {
+  3: ['[Tournament F]', 'Group stage · Bo3'],
+  10: ['[Tournament F]', 'Group stage · Bo3'],
+  17: ['[Tournament E]', 'Lower bracket semi · Bo3'],
+  25: ['[Tournament D]', 'Grand final · Bo5'],
+}
+
+function october(): CalendarEvent[] {
+  let k = 0
+  return Object.entries(octoberPlan).flatMap(([day, codes]) =>
+    codes.split(' ').map((code, i): CalendarEvent => {
+      const date = `2026-10-${pad(Number(day))}`
+      const type = typeByCode[code[0]]
+      const base = { id: `${date}-${i}`, date, time: `${pad(Number(code.slice(1)))}:00`, type }
+      if (type === 'scrim') {
+        const opponent = opponents[k++ % opponents.length]
+        return { ...base, title: `Scrim vs ${opponent}`, detail: k % 2 ? 'Bo3' : 'Bo2', opponent, status: 'played' }
       }
+      if (type === 'tournament') {
+        const [title, detail] = octoberTournaments[Number(day)]
+        return { ...base, title, detail }
+      }
+      return { ...base, title: 'VOD review', detail: 'Last match' }
     }),
   )
 }
 
-export const events: CalendarEvent[] = [
-  ...expand(2026, 10, october),
-  ...expand(2026, 11, november),
+// From today onward: written out in full.
+type Row = [date: string, time: string, type: EventType, title: string, detail: string, status?: BookingStatus]
+const upcoming: Row[] = [
+  ['2026-10-31', '13:00', 'scrim', 'Scrim vs [Opponent E]', 'Bo2 · warm-up', 'confirmed'],
+  ['2026-10-31', '16:30', 'review', 'Draft prep', 'Game plan vs [Opponent]'],
+  ['2026-10-31', '19:00', 'tournament', '[Tournament A]', 'Group stage R1 vs [Opponent] · Bo3'],
+  ['2026-11-01', '19:00', 'tournament', '[Tournament A]', 'Group stage R2 vs [Opponent G] · Bo3'],
+  ['2026-11-02', '19:00', 'scrim', 'Scrim vs [Opponent A]', 'Bo3', 'confirmed'],
+  ['2026-11-03', '19:00', 'scrim', 'Scrim vs [Opponent C]', 'Bo2', 'confirmed'],
+  ['2026-11-04', '20:00', 'review', 'VOD review', 'Group stage R1 and R2'],
+  ['2026-11-05', '20:00', 'scrim', 'Scrim vs [Opponent B]', 'Bo3', 'pending'],
+  ['2026-11-06', '19:00', 'scrim', 'Scrim vs [Opponent D]', 'Bo2', 'confirmed'],
+  ['2026-11-07', '18:00', 'tournament', '[Tournament A]', 'Group stage R3 vs [Opponent H] · Bo3'],
+  ['2026-11-08', 'TBD', 'tournament', '[Tournament A]', 'Playoffs · if qualified'],
+  ['2026-11-10', '19:00', 'scrim', 'Scrim vs [Opponent F]', 'Bo3', 'pending'],
+  ['2026-11-11', '19:00', 'scrim', 'Scrim vs [Opponent A]', 'Bo2', 'pending'],
+  ['2026-11-12', '20:00', 'review', 'VOD review', 'Playoffs'],
+  ['2026-11-13', '19:00', 'scrim', 'Scrim vs [Opponent C]', 'Bo3', 'pending'],
+  ['2026-11-14', '18:00', 'tournament', '[Tournament B]', 'Closed qualifier · Bo1 groups'],
+  ['2026-11-15', '15:00', 'review', 'VOD review', 'Qualifier'],
 ]
+
+export const events: CalendarEvent[] = [
+  ...october(),
+  ...upcoming.map(([date, time, type, title, detail, status], i): CalendarEvent => ({
+    id: `${date}-u${i}`,
+    date,
+    time,
+    type,
+    title,
+    detail,
+    status,
+    opponent: type === 'scrim' ? title.replace('Scrim vs ', '') : undefined,
+  })),
+].sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time))
 
 export const nextMatch: NextMatch = {
   opponent: '[Opponent]',
-  tournament: '[Tournament name]',
+  tournament: '[Tournament A]',
   format: 'Official · Bo3',
   start: '2026-10-31T19:00:00+07:00',
+}
+
+export const nextTournament = {
+  name: '[Tournament A]',
+  dates: '31 Oct – 8 Nov',
+  stage: 'Group stage',
+  format: 'Bo3 · 3 rounds',
+  status: 'Registered',
+  firstMatch: { opponent: '[Opponent]', start: '2026-10-31T19:00:00+07:00' },
 }
 
 export const tournamentResults: TournamentResult[] = [

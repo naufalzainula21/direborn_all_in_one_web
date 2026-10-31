@@ -1,5 +1,27 @@
 const TZ = 'Asia/Jakarta'
 
+/** Today's date in WIB as YYYY-MM-DD, whatever the device time zone. */
+export function todayISO(now: Date): string {
+  return now.toLocaleDateString('en-CA', { timeZone: TZ })
+}
+
+/** Current WIB time as HH:mm. */
+export function nowHHMM(now: Date): string {
+  return now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: TZ })
+}
+
+export function addDays(iso: string, n: number): string {
+  const d = parseDay(iso)
+  d.setDate(d.getDate() + n)
+  return toISODate(d)
+}
+
+/** Monday of the week containing iso. */
+export function mondayOf(iso: string): string {
+  const d = parseDay(iso)
+  return addDays(iso, -((d.getDay() + 6) % 7))
+}
+
 export function parseDay(iso: string): Date {
   const [y, m, d] = iso.split('-').map(Number)
   return new Date(y, m - 1, d)

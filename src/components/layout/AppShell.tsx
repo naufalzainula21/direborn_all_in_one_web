@@ -1,24 +1,41 @@
 import type { ReactNode } from 'react'
+import { Link, NavLink } from 'react-router-dom'
 import { Icon } from '../Icon'
-import { navItems } from './nav'
+import { navItems, type NavItem } from './nav'
 
-interface Props {
-  active: string
-  children: ReactNode
+function NavItemLink({ item, className, iconSize }: { item: NavItem; className: string; iconSize: number }) {
+  const content = (
+    <>
+      <Icon name={item.icon} size={iconSize} />
+      {item.label}
+    </>
+  )
+  if (!item.path) {
+    return (
+      <a href={`#${item.id}`} className={className} title="Coming soon">
+        {content}
+      </a>
+    )
+  }
+  return (
+    <NavLink to={item.path} end className={({ isActive }) => `${className}${isActive ? ' is-active' : ''}`}>
+      {content}
+    </NavLink>
+  )
 }
 
-export function AppShell({ active, children }: Props) {
+export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div className="app">
       <header className="topbar">
         <div className="topbar__inner">
-          <a href="/" className="brand">
+          <Link to="/" className="brand">
             <img src="/logo.png" alt="" className="brand__logo" />
             <span className="brand__text">
               <span className="brand__name">Direborn</span>
               <span className="brand__sub">Esport division</span>
             </span>
-          </a>
+          </Link>
 
           <div className="topbar__search">
             <label htmlFor="search" className="sr-only">Search</label>
@@ -45,15 +62,7 @@ export function AppShell({ active, children }: Props) {
         <aside className="sidebar">
           <nav aria-label="Main">
             {navItems.map((item) => (
-              <a
-                key={item.id}
-                href={item.id === 'home' ? '/' : `#${item.id}`}
-                className={`sidebar__link${item.id === active ? ' is-active' : ''}`}
-                aria-current={item.id === active ? 'page' : undefined}
-              >
-                <Icon name={item.icon} />
-                {item.label}
-              </a>
+              <NavItemLink key={item.id} item={item} className="sidebar__link" iconSize={18} />
             ))}
           </nav>
         </aside>
@@ -63,15 +72,7 @@ export function AppShell({ active, children }: Props) {
 
       <nav className="tabbar" aria-label="Main">
         {navItems.map((item) => (
-          <a
-            key={item.id}
-            href={item.id === 'home' ? '/' : `#${item.id}`}
-            className={`tabbar__link${item.id === active ? ' is-active' : ''}`}
-            aria-current={item.id === active ? 'page' : undefined}
-          >
-            <Icon name={item.icon} size={22} />
-            {item.label}
-          </a>
+          <NavItemLink key={item.id} item={item} className="tabbar__link" iconSize={22} />
         ))}
       </nav>
     </div>

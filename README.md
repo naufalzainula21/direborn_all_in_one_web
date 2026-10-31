@@ -38,7 +38,9 @@ src/
   lib/format.ts            Date, time and countdown helpers (WIB)
   components/layout/       Header, sidebar, phone tab bar
   components/home/         Next match, month calendar, results, upcoming
-  pages/Home.tsx           Home page
+  components/schedule/     Today card, day/week/month browser, side lists
+  pages/Home.tsx           Home page (/)
+  pages/Schedule.tsx       Schedule page (/schedule)
 public/
   logo.png, favicon.png, icons/, manifest.webmanifest
 ```
@@ -57,6 +59,6 @@ public/
 
 ## Next steps
 
-- Schedule page (add/edit events)
+- Add and edit events from the Schedule page
 - Store real data (Cloudflare D1) so the whole team shares one calendar
 - Scrims, Tournaments and Roster pages
