@@ -814,3 +814,4 @@ button { font: inherit; }
 .today-card--btn:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
 .today-card__title { font-family: var(--font-display); text-transform: uppercase; letter-spacing: .04em; }
 .week-day .chip--btn { white-space: normal; overflow: visible; line-height: 1.35; }
+.tour-head .badge { align-self: flex-start; }
