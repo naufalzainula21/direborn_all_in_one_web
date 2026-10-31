@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { AddEventDialog } from './components/events/AddEventDialog'
 import { AppShell } from './components/layout/AppShell'
+import { EventsProvider } from './data/events'
 import { Home } from './pages/Home'
 import { Schedule } from './pages/Schedule'
 
@@ -15,13 +17,16 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <AppShell>
-        <Routes>
-          <Route path="/" element={<Home now={now} />} />
-          <Route path="/schedule" element={<Schedule now={now} />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </AppShell>
+      <EventsProvider>
+        <AppShell>
+          <Routes>
+            <Route path="/" element={<Home now={now} />} />
+            <Route path="/schedule" element={<Schedule now={now} />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </AppShell>
+        <AddEventDialog />
+      </EventsProvider>
     </BrowserRouter>
   )
 }

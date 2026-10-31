@@ -2,16 +2,18 @@
 
 Team app for Direborn's Dota 2 division: schedule, scrim results, tournament results and upcoming tournaments. It works on desktop and phone, and can be saved to the iPhone home screen from Safari so it opens like a native app.
 
-**Stack:** React 19 + TypeScript + Vite, deployed as a static site on Cloudflare Pages.
+**Stack:** React 19 + TypeScript + Vite for the app, a Cloudflare Worker for the API, and Cloudflare D1 (SQLite) for the shared schedule.
 
 ## Run locally
 
 ```bash
 npm install
-npm run dev      # http://localhost:5173
+npm run dev      # app on http://localhost:5173 (calls /api on :8787)
+npm run dev:api  # Worker + local D1 database on http://localhost:8787
 npm run build    # production build into dist/
-npm run preview  # serve the production build
 ```
+
+Run `npm run build` once before `npm run dev:api`; the Worker serves `dist/` too. Without the API running, the app falls back to sample data.
 
 ## Deploy to Cloudflare (Workers static assets)
 
@@ -21,7 +23,26 @@ The Worker is set up in the Cloudflare dashboard (Workers & Pages → connected 
 - Deploy command: `npx wrangler deploy`
 - Root directory: `/`
 
-`wrangler.jsonc` tells Wrangler to publish `dist/` and to serve `index.html` for any unknown path, so future pages work on refresh. Every push to `main` redeploys automatically.
+`wrangler.jsonc` sets up:
+
+- `worker/index.ts` handles `/api/*`; everything else is the React app from `dist/` (unknown paths serve `index.html`).
+- A D1 database bound as `DB` (name `direborn`). Wrangler creates it on the first deploy and reuses it after. The `events` table is created automatically on first use.
+
+Every push to `main` redeploys automatically.
+
+### Team code (recommended)
+
+By default anyone with the link can add or delete events. To require a code: Cloudflare dashboard → the Worker → **Settings → Variables and Secrets → Add** → type **Secret**, name `TEAM_KEY`, value of your choice. The app asks for the code the first time someone saves an event and remembers it on that device.
+
+## API
+
+| Method | Path | Body / notes |
+|---|---|---|
+| GET | `/api/events` | Optional `?from=YYYY-MM-DD&to=YYYY-MM-DD` |
+| POST | `/api/events` | `{ type, date, time, title, detail, opponent?, status?, notes? }`; `type` is `tournament`, `scrim`, `practice` or `other`; `time` is `HH:MM` or `TBD` |
+| DELETE | `/api/events/:id` | |
+
+POST and DELETE need `X-Team-Key` when `TEAM_KEY` is set.
 
 ## Add to the iPhone home screen
 
@@ -34,13 +55,19 @@ src/
   styles/tokens.css        Brand palette, fonts, radii (from the logo)
   styles/app.css           All layout and component styles
   data/types.ts            Data shapes (events, results, tournaments)
-  data/sample.ts           Placeholder data, replace when storage is added
+  data/api.ts              API client (events)
+  data/events.tsx          Events context: loads from the API, add/remove, dialog state
+  data/sample.ts           Placeholder data (fallback when the API is unreachable)
+  components/events/       Add event dialog
   lib/format.ts            Date, time and countdown helpers (WIB)
+  lib/schedule.ts          Next match / next tournament from events
   components/layout/       Header, sidebar, phone tab bar
   components/home/         Next match, month calendar, results, upcoming
   components/schedule/     Today card, day/week/month browser, side lists
   pages/Home.tsx           Home page (/)
   pages/Schedule.tsx       Schedule page (/schedule)
+worker/
+  index.ts                 API Worker (D1) + static assets
 public/
   logo.png, favicon.png, icons/, manifest.webmanifest
 ```
@@ -59,6 +86,6 @@ public/
 
 ## Next steps
 
-- Add and edit events from the Schedule page
-- Store real data (Cloudflare D1) so the whole team shares one calendar
+- Edit existing events
+- Results: record scrim and tournament scores
 - Scrims, Tournaments and Roster pages

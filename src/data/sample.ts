@@ -3,17 +3,16 @@ import type {
   BookingStatus,
   CalendarEvent,
   EventType,
-  NextMatch,
   ScrimResult,
   TournamentResult,
   UpcomingTournament,
 } from './types'
 
 const pad = (n: number) => String(n).padStart(2, '0')
-const typeByCode: Record<string, EventType> = { s: 'scrim', t: 'tournament', r: 'review' }
+const typeByCode: Record<string, EventType> = { s: 'scrim', t: 'tournament', r: 'practice' }
 const opponents = ['[Opponent A]', '[Opponent B]', '[Opponent C]', '[Opponent D]', '[Opponent E]', '[Opponent F]']
 
-// October: past events, generated from a compact plan (s=scrim, t=tournament, r=review + hour).
+// October: past events, generated from a compact plan (s=scrim, t=tournament, r=practice + hour).
 const octoberPlan: Record<number, string> = {
   1: 's19', 2: 's19', 3: 't19', 4: 'r15', 6: 's19', 7: 's19', 9: 's19', 10: 't19', 11: 'r15',
   13: 's19', 14: 's18 s21', 16: 's19', 17: 't19', 19: 's19', 20: 's19', 22: 's19', 23: 's19',
@@ -50,22 +49,22 @@ function october(): CalendarEvent[] {
 type Row = [date: string, time: string, type: EventType, title: string, detail: string, status?: BookingStatus]
 const upcoming: Row[] = [
   ['2026-10-31', '13:00', 'scrim', 'Scrim vs [Opponent E]', 'Bo2 · warm-up', 'confirmed'],
-  ['2026-10-31', '16:30', 'review', 'Draft prep', 'Game plan vs [Opponent]'],
+  ['2026-10-31', '16:30', 'practice', 'Draft prep', 'Game plan vs [Opponent]'],
   ['2026-10-31', '19:00', 'tournament', '[Tournament A]', 'Group stage R1 vs [Opponent] · Bo3'],
   ['2026-11-01', '19:00', 'tournament', '[Tournament A]', 'Group stage R2 vs [Opponent G] · Bo3'],
   ['2026-11-02', '19:00', 'scrim', 'Scrim vs [Opponent A]', 'Bo3', 'confirmed'],
   ['2026-11-03', '19:00', 'scrim', 'Scrim vs [Opponent C]', 'Bo2', 'confirmed'],
-  ['2026-11-04', '20:00', 'review', 'VOD review', 'Group stage R1 and R2'],
+  ['2026-11-04', '20:00', 'practice', 'VOD review', 'Group stage R1 and R2'],
   ['2026-11-05', '20:00', 'scrim', 'Scrim vs [Opponent B]', 'Bo3', 'pending'],
   ['2026-11-06', '19:00', 'scrim', 'Scrim vs [Opponent D]', 'Bo2', 'confirmed'],
   ['2026-11-07', '18:00', 'tournament', '[Tournament A]', 'Group stage R3 vs [Opponent H] · Bo3'],
   ['2026-11-08', 'TBD', 'tournament', '[Tournament A]', 'Playoffs · if qualified'],
   ['2026-11-10', '19:00', 'scrim', 'Scrim vs [Opponent F]', 'Bo3', 'pending'],
   ['2026-11-11', '19:00', 'scrim', 'Scrim vs [Opponent A]', 'Bo2', 'pending'],
-  ['2026-11-12', '20:00', 'review', 'VOD review', 'Playoffs'],
+  ['2026-11-12', '20:00', 'practice', 'VOD review', 'Playoffs'],
   ['2026-11-13', '19:00', 'scrim', 'Scrim vs [Opponent C]', 'Bo3', 'pending'],
   ['2026-11-14', '18:00', 'tournament', '[Tournament B]', 'Closed qualifier · Bo1 groups'],
-  ['2026-11-15', '15:00', 'review', 'VOD review', 'Qualifier'],
+  ['2026-11-15', '15:00', 'practice', 'VOD review', 'Qualifier'],
 ]
 
 export const events: CalendarEvent[] = [
@@ -78,25 +77,9 @@ export const events: CalendarEvent[] = [
     title,
     detail,
     status,
-    opponent: type === 'scrim' ? title.replace('Scrim vs ', '') : undefined,
+    opponent: type === 'scrim' ? title.replace('Scrim vs ', '') : detail.match(/vs ([^·]+)/)?.[1].trim(),
   })),
 ].sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time))
-
-export const nextMatch: NextMatch = {
-  opponent: '[Opponent]',
-  tournament: '[Tournament A]',
-  format: 'Official · Bo3',
-  start: '2026-10-31T19:00:00+07:00',
-}
-
-export const nextTournament = {
-  name: '[Tournament A]',
-  dates: '31 Oct – 8 Nov',
-  stage: 'Group stage',
-  format: 'Bo3 · 3 rounds',
-  status: 'Registered',
-  firstMatch: { opponent: '[Opponent]', start: '2026-10-31T19:00:00+07:00' },
-}
 
 export const tournamentResults: TournamentResult[] = [
   { id: 't1', date: '2026-10-25', tournament: '[Tournament D]', stage: 'Grand final vs [Opponent]', score: [1, 2], placement: 'second' },

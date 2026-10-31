@@ -1,4 +1,4 @@
-export type EventType = 'scrim' | 'tournament' | 'review'
+export type EventType = 'tournament' | 'scrim' | 'practice' | 'other'
 
 export type BookingStatus = 'confirmed' | 'pending' | 'played'
 
@@ -11,6 +11,7 @@ export interface CalendarEvent {
   detail: string // "Bo3", "Group stage R1 vs [Opponent] · Bo3"
   opponent?: string
   status?: BookingStatus // scrims only
+  notes?: string
 }
 
 export type ScrimOutcome = 'win' | 'loss' | 'draw'

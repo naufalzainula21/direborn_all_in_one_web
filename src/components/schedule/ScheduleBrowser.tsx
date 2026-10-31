@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { CalendarEvent } from '../../data/types'
+import { useEvents } from '../../data/events'
 import { addDays, mondayOf, parseDay, toISODate } from '../../lib/format'
 import { Icon } from '../Icon'
 import { CHIP_LABEL, DOW, TYPE_LABEL, type ScheduleFilter, type ScheduleView } from './meta'
@@ -24,6 +25,7 @@ const FILTERS: { id: ScheduleFilter; label: string }[] = [
   { id: 'all', label: 'All' },
   { id: 'tournament', label: 'Tournaments' },
   { id: 'scrim', label: 'Scrims' },
+  { id: 'practice', label: 'Practice' },
 ]
 
 function ViewIcon({ view }: { view: ScheduleView }) {
@@ -132,7 +134,7 @@ export function ScheduleBrowser({ events, today }: { events: CalendarEvent[]; to
         </div>
       </div>
 
-      {view === 'day' && <DayView events={byDate.get(cursor) ?? []} />}
+      {view === 'day' && <DayView date={cursor} events={byDate.get(cursor) ?? []} />}
       {view === 'week' && <WeekView start={mondayOf(cursor)} today={today} byDate={byDate} />}
       {view === 'month' && (
         <MonthView
@@ -146,15 +148,41 @@ export function ScheduleBrowser({ events, today }: { events: CalendarEvent[]; to
       <ul className="legend">
         <li><span className="legend__dot legend__dot--tournament" />Tournament match</li>
         <li><span className="legend__dot legend__dot--scrim" />Scrim</li>
-        <li><span className="legend__dot legend__dot--review" />Review / prep</li>
+        <li><span className="legend__dot legend__dot--practice" />Practice</li>
+        <li><span className="legend__dot legend__dot--other" />Other</li>
       </ul>
     </section>
   )
 }
 
-function DayView({ events }: { events: CalendarEvent[] }) {
-  if (events.length === 0) return <p className="browser__empty">No events on this day. Rest day.</p>
+function DayView({ date, events }: { date: string; events: CalendarEvent[] }) {
+  const { openAdd, remove, source } = useEvents()
+  const [busy, setBusy] = useState<string | null>(null)
+  const [error, setError] = useState('')
+
+  const onDelete = async (e: CalendarEvent) => {
+    if (!window.confirm(`Delete "${e.title}" on ${e.date}?`)) return
+    setBusy(e.id)
+    setError('')
+    try { await remove(e.id) } catch (err) { setError(err instanceof Error ? err.message : 'Could not delete.') }
+    finally { setBusy(null) }
+  }
+
+  const addButton = (
+    <button type="button" className="ghost-btn day-list__add" onClick={() => openAdd(date)}>+ Add event on this day</button>
+  )
+
+  if (events.length === 0) {
+    return (
+      <div className="browser__empty">
+        <p>No events on this day. Rest day.</p>
+        {addButton}
+      </div>
+    )
+  }
   return (
+    <>
+    {error && <p className="field__error" role="alert">{error}</p>}
     <ul className="day-list">
       {events.map((e) => (
         <li key={e.id} className="day-list__item">
@@ -163,11 +191,19 @@ function DayView({ events }: { events: CalendarEvent[] }) {
           <span className="day-list__text">
             <span className="day-list__title">{e.title}</span>
             <span className="muted small">{e.detail}</span>
+            {e.notes && <span className="day-list__notes">{e.notes}</span>}
           </span>
           <span className={`badge badge--type-${e.type}`}>{TYPE_LABEL[e.type]}</span>
+          {source === 'db' && (
+            <button type="button" className="icon-btn icon-btn--sm" aria-label={`Delete ${e.title}`} disabled={busy === e.id} onClick={() => onDelete(e)}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" /></svg>
+            </button>
+          )}
         </li>
       ))}
     </ul>
+    {addButton}
+    </>
   )
 }
 

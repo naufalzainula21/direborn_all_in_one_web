@@ -24,7 +24,7 @@
   --loss-bg: #fde8e9;  --loss: #b3141c;
   --scrim-bg: #e6f0fc; --scrim: #1f5fa8; --scrim-dot: #4f9be8;
   --review-bg: #f8f0dc; --review: #7a5a12;
-  --neutral-bg: #f0ebe4; --neutral: #5a504b;
+  --neutral-bg: #f0ebe4; --neutral: #5a504b; --other-dot: #8c817b;
 
   /* Type */
   --font-display: 'Chakra Petch', system-ui, sans-serif;

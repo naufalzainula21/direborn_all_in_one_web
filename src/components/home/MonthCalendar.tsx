@@ -4,8 +4,8 @@ import { parseDay, toISODate } from '../../lib/format'
 import { Icon } from '../Icon'
 
 const WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-const LABEL: Record<EventType, string> = { scrim: 'Scrim', tournament: 'Match', review: 'Review' }
-const AGENDA_LABEL: Record<EventType, string> = { scrim: 'Scrim', tournament: 'Tournament match', review: 'Review' }
+const LABEL: Record<EventType, string> = { scrim: 'Scrim', tournament: 'Match', practice: 'Practice', other: 'Session' }
+const AGENDA_LABEL: Record<EventType, string> = { scrim: 'Scrim', tournament: 'Tournament match', practice: 'Practice', other: 'Other' }
 
 interface Cell {
   iso: string
@@ -64,7 +64,8 @@ export function MonthCalendar({ events, today }: { events: CalendarEvent[]; toda
         <ul className="legend">
           <li><span className="legend__dot legend__dot--scrim" />Scrim</li>
           <li><span className="legend__dot legend__dot--tournament" />Tournament match</li>
-          <li><span className="legend__dot legend__dot--review" />Review</li>
+          <li><span className="legend__dot legend__dot--practice" />Practice</li>
+          <li><span className="legend__dot legend__dot--other" />Other</li>
         </ul>
       </div>
 

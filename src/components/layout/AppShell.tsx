@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { Link, NavLink } from 'react-router-dom'
+import { useEvents } from '../../data/events'
 import { Icon } from '../Icon'
 import { navItems, type NavItem } from './nav'
 
@@ -25,6 +26,7 @@ function NavItemLink({ item, className, iconSize }: { item: NavItem; className: 
 }
 
 export function AppShell({ children }: { children: ReactNode }) {
+  const { openAdd } = useEvents()
   return (
     <div className="app">
       <header className="topbar">
@@ -43,7 +45,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           </div>
 
           <div className="topbar__actions">
-            <button type="button" className="btn btn--primary">
+            <button type="button" className="btn btn--primary" onClick={() => openAdd()} aria-label="Add event">
               <Icon name="plus" size={16} strokeWidth={2.4} />
               <span className="btn__label">Add event</span>
             </button>

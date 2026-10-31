@@ -1,11 +1,14 @@
-import { events, nextMatch, scrimResults, tournamentResults, upcomingTournaments } from '../data/sample'
+import { scrimResults, tournamentResults, upcomingTournaments } from '../data/sample'
+import { useEvents } from '../data/events'
 import { longToday } from '../lib/format'
+import { nextTournamentMatch } from '../lib/schedule'
 import { MonthCalendar } from '../components/home/MonthCalendar'
 import { NextMatchBanner } from '../components/home/NextMatchBanner'
 import { ScrimResults, TournamentResults } from '../components/home/Results'
 import { UpcomingTournaments } from '../components/home/UpcomingTournaments'
 
 export function Home({ now }: { now: Date }) {
+  const { events } = useEvents()
   return (
     <>
       <div className="page-head">
@@ -15,7 +18,7 @@ export function Home({ now }: { now: Date }) {
 
       <div className="home-grid">
         <div className="stack">
-          <NextMatchBanner match={nextMatch} now={now} />
+          <NextMatchBanner match={nextTournamentMatch(events, now)} now={now} />
           <MonthCalendar events={events} today={now} />
           <TournamentResults results={tournamentResults} />
           <ScrimResults results={scrimResults} />

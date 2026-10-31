@@ -1,6 +1,6 @@
 import type { CalendarEvent } from '../../data/types'
-import type { nextTournament as NextTournamentData } from '../../data/sample'
 import { countdown, matchTime, parseDay } from '../../lib/format'
+import { formatOf, stageOf, startISO, type TournamentSummary } from '../../lib/schedule'
 import { Icon } from '../Icon'
 import { DOW } from './meta'
 
@@ -15,9 +15,27 @@ function DateBox({ iso, today }: { iso: string; today: string }) {
   )
 }
 
-export function NextTournamentCard({ t, now }: { t: typeof NextTournamentData; now: Date }) {
+export function NextTournamentCard({ t, now }: { t?: TournamentSummary; now: Date }) {
+  if (!t) {
+    return (
+      <section className="next-tour" aria-labelledby="nt-title">
+        <div className="next-tour__head">
+          <span className="feature__icon"><Icon name="trophy" size={22} /></span>
+          <span className="next-tour__heading">
+            <span className="next-tour__eyebrow">Next tournament</span>
+            <h2 id="nt-title" className="next-tour__name">Nothing scheduled</h2>
+          </span>
+        </div>
+      </section>
+    )
+  }
+  const first = t.first
+  const start = startISO(first)
   const facts: [string, string][] = [
-    ['Dates', t.dates], ['Stage', t.stage], ['Format', t.format], ['Status', t.status],
+    ['Dates', t.dates],
+    ['Matches', `${t.matches.length} scheduled`],
+    ['Next round', stageOf(first) ?? '—'],
+    ['Format', formatOf(first) ?? '—'],
   ]
   return (
     <section className="next-tour" aria-labelledby="nt-title">
@@ -35,10 +53,14 @@ export function NextTournamentCard({ t, now }: { t: typeof NextTournamentData; n
       </dl>
       <div className="next-tour__match">
         <span className="next-tour__match-text">
-          <span className="next-tour__match-label">First match</span>
-          <span className="next-tour__match-name">vs {t.firstMatch.opponent} · {matchTime(t.firstMatch.start, now)}</span>
+          <span className="next-tour__match-label">Next match</span>
+          <span className="next-tour__match-name">
+            {first.opponent ? `vs ${first.opponent} · ` : ''}{first.time === 'TBD' ? 'Time TBD' : matchTime(start, now)}
+          </span>
         </span>
-        <span className="next-tour__countdown">{countdown(t.firstMatch.start, now).replace('Starts in ', 'In ')}</span>
+        {first.time !== 'TBD' && (
+          <span className="next-tour__countdown">{countdown(start, now).replace('Starts in ', 'In ')}</span>
+        )}
       </div>
     </section>
   )
