@@ -1,8 +1,8 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
-import { createEvent, deleteEvent, fetchEvents, type NewEvent } from './api'
+import { createEvent, deleteEvent, fetchEvents, updateEvent, type EventPatch, type NewEvent } from './api'
 import { buildOfficialSeries, officialEvents, type OfficialSeries } from './official'
 import type { Game } from './tournaments'
-import type { CalendarEvent } from './types'
+import type { CalendarEvent, EventType } from './types'
 
 /**
  * Where the team's own events come from:
@@ -22,8 +22,13 @@ interface EventsState {
   series: OfficialSeries[]
   add: (e: NewEvent) => Promise<CalendarEvent>
   remove: (id: string) => Promise<void>
-  openAdd: (date?: string) => void
-  addDialog: { open: boolean; date?: string }
+  update: (id: string, patch: EventPatch) => Promise<CalendarEvent>
+  openAdd: (date?: string, type?: EventType) => void
+  addDialog: { open: boolean; date?: string; type?: EventType }
+  /** Record or edit a scrim result */
+  openResult: (e: CalendarEvent) => void
+  resultFor: CalendarEvent | null
+  closeResult: () => void
   closeAdd: () => void
   /** Open the match summary popup for a series. */
   openMatch: (seriesKey: string) => void
@@ -44,7 +49,8 @@ export function EventsProvider({ children }: { children: ReactNode }) {
   const [teamEvents, setTeamEvents] = useState<CalendarEvent[]>([])
   const [source, setSource] = useState<EventSource>('loading')
   const [games, setGames] = useState<Game[]>([])
-  const [addDialog, setAddDialog] = useState<{ open: boolean; date?: string }>({ open: false })
+  const [addDialog, setAddDialog] = useState<{ open: boolean; date?: string; type?: EventType }>({ open: false })
+  const [resultFor, setResultFor] = useState<CalendarEvent | null>(null)
   const [matchKey, setMatchKey] = useState<string | null>(null)
   const [eventDetail, setEventDetail] = useState<CalendarEvent | null>(null)
 
@@ -75,7 +81,16 @@ export function EventsProvider({ children }: { children: ReactNode }) {
     setEventDetail(null)
   }, [])
 
-  const openAdd = useCallback((date?: string) => setAddDialog({ open: true, date }), [])
+  const update = useCallback(async (id: string, patch: EventPatch) => {
+    const { event } = await updateEvent(id, patch)
+    setTeamEvents((list) => list.map((e) => (e.id === id ? event : e)))
+    setEventDetail((cur) => (cur && cur.id === id ? event : cur))
+    return event
+  }, [])
+
+  const openAdd = useCallback((date?: string, type?: EventType) => setAddDialog({ open: true, date, type }), [])
+  const openResult = useCallback((e: CalendarEvent) => setResultFor(e), [])
+  const closeResult = useCallback(() => setResultFor(null), [])
   const closeAdd = useCallback(() => setAddDialog({ open: false }), [])
   const openMatch = useCallback((key: string) => setMatchKey(key), [])
   const closeMatch = useCallback(() => setMatchKey(null), [])
@@ -86,8 +101,8 @@ export function EventsProvider({ children }: { children: ReactNode }) {
   const closeEvent = useCallback(() => setEventDetail(null), [])
 
   const value = useMemo(
-    () => ({ events, source, games, series, add, remove, openAdd, addDialog, closeAdd, openMatch, matchKey, closeMatch, openEvent, eventDetail, closeEvent }),
-    [events, source, games, series, add, remove, openAdd, addDialog, closeAdd, openMatch, matchKey, closeMatch, openEvent, eventDetail, closeEvent],
+    () => ({ events, source, games, series, add, remove, update, openResult, resultFor, closeResult, openAdd, addDialog, closeAdd, openMatch, matchKey, closeMatch, openEvent, eventDetail, closeEvent }),
+    [events, source, games, series, add, remove, update, openResult, resultFor, closeResult, openAdd, addDialog, closeAdd, openMatch, matchKey, closeMatch, openEvent, eventDetail, closeEvent],
   )
   return <EventsContext.Provider value={value}>{children}</EventsContext.Provider>
 }

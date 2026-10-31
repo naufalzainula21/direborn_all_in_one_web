@@ -40,9 +40,10 @@ By default anyone with the link can add or delete events. To require a code: Clo
 |---|---|---|
 | GET | `/api/events` | Optional `?from=YYYY-MM-DD&to=YYYY-MM-DD` |
 | POST | `/api/events` | `{ type, date, time, title, detail, opponent?, status?, notes? }`; `type` is `tournament`, `scrim`, `practice` or `other`; `time` is `HH:MM` or `TBD` |
+| PATCH | `/api/events/:id` | Any of `{ status, scoreUs, scoreThem, matchIds, notes }`; `null` clears. Used for scrim results |
 | DELETE | `/api/events/:id` | |
 
-POST and DELETE need `X-Team-Key` when `TEAM_KEY` is set.
+POST, PATCH and DELETE need `X-Team-Key` when `TEAM_KEY` is set.
 
 ## Add to the iPhone home screen
 
@@ -66,6 +67,7 @@ src/
   components/schedule/     Today card, day/week/month browser, side lists
   pages/Home.tsx           Home page (/)
   pages/Schedule.tsx       Schedule page (/schedule)
+  pages/Scrims.tsx         Scrims page (/scrims): schedule, needs a result, results, record by opponent
   pages/Tournaments.tsx    Tournaments page (/tournaments): running event, past results, popup with highlights and scoreboards
   data/tournaments.ts      Tournament list, EPL S19 standings, upcoming, helpers
   data/official.ts         Official matches as series + schedule events (shown on every page)
@@ -95,5 +97,5 @@ public/
 - Edit existing events
 - Results: record scrim and tournament scores
 - Nightly sync: new official games from OpenDota, SEA qualifiers from Liquipedia API
-- Scrims and Roster pages
+- Roster page
 - Team stats page

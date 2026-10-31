@@ -11,7 +11,7 @@ export interface NavItem {
 export const navItems: NavItem[] = [
   { id: 'home', label: 'Home', icon: 'home', path: '/' },
   { id: 'schedule', label: 'Schedule', icon: 'calendar', path: '/schedule' },
-  { id: 'scrims', label: 'Scrims', icon: 'target' },
+  { id: 'scrims', label: 'Scrims', icon: 'target', path: '/scrims' },
   { id: 'tournaments', label: 'Tournaments', icon: 'trophy', path: '/tournaments' },
   { id: 'roster', label: 'Roster', icon: 'users' },
 ]

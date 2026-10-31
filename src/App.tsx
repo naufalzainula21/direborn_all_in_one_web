@@ -3,6 +3,8 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AddEventDialog } from './components/events/AddEventDialog'
 import { MatchDialog } from './components/tournaments/MatchDialog'
 import { EventDialog } from './components/events/EventDialog'
+import { ScrimResultDialog } from './components/events/ScrimResultDialog'
+import { Scrims } from './pages/Scrims'
 import { AppShell } from './components/layout/AppShell'
 import { EventsProvider } from './data/events'
 import { Home } from './pages/Home'
@@ -26,6 +28,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Home now={now} />} />
             <Route path="/schedule" element={<Schedule now={now} />} />
+            <Route path="/scrims" element={<Scrims now={now} />} />
             <Route path="/tournaments" element={<Tournaments now={now} />} />
             <Route path="/tournaments/upcoming" element={<TournamentsUpcoming />} />
             <Route path="*" element={<Navigate to="/" replace />} />
@@ -34,6 +37,7 @@ export default function App() {
         <AddEventDialog />
         <MatchDialog />
         <EventDialog />
+        <ScrimResultDialog />
       </EventsProvider>
     </BrowserRouter>
   )

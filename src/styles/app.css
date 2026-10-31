@@ -856,3 +856,38 @@ button { font: inherit; }
   .card__head .segmented { width: 100%; }
 }
 @media (max-width: 760px) { .tile__value--sm { font-size: 16px; } .tile__value { font-size: 24px; } }
+
+/* =========================================================
+   Scrims page and result entry
+   ========================================================= */
+.btn--sm { height: 36px; padding: 0 12px; font-size: 12px; flex: none; }
+.card--alert { border-color: #f3c4c7; background: #fffafa; }
+.empty { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+.empty p { margin: 0; color: var(--muted); }
+.tile--btn { text-align: left; font: inherit; cursor: pointer; }
+.tile--btn:disabled { cursor: default; }
+.tile--btn:not(:disabled):hover { filter: brightness(1.04); }
+.table--compact { min-width: 0; }
+.table--compact td, .table--compact th { padding: 8px 6px; }
+.how { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: var(--muted); }
+.how strong { color: var(--text); font-weight: 600; }
+
+.score-entry { display: flex; align-items: flex-end; justify-content: center; gap: 16px; padding: 8px 0; }
+.score-entry__dash { font-family: var(--font-display); font-size: 32px; font-weight: 700; color: var(--muted); padding-bottom: 6px; }
+.score-entry__outcome { margin: 0; text-align: center; font-family: var(--font-display); text-transform: uppercase; letter-spacing: .04em; font-weight: 700; font-size: 18px; }
+.score-entry__outcome.is-win { color: var(--win); }
+.score-entry__outcome.is-loss { color: var(--loss); }
+.score-entry__outcome.is-draw { color: var(--neutral); }
+.stepper { display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 0; }
+.stepper .field__label { max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.stepper__row { display: flex; align-items: center; gap: 10px; }
+.stepper__row .icon-btn { font-size: 22px; line-height: 1; }
+.stepper__value { font-family: var(--font-display); font-size: 40px; font-weight: 700; min-width: 40px; text-align: center; }
+
+.result-banner { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 12px; }
+.result-banner.is-win { background: var(--win-bg); color: var(--win); }
+.result-banner.is-loss { background: var(--loss-bg); color: var(--loss); }
+.result-banner.is-draw { background: var(--neutral-bg); color: var(--neutral); }
+.result-banner__label, .result-banner__score { font-family: var(--font-display); text-transform: uppercase; font-weight: 700; }
+.result-banner__label { font-size: 16px; }
+.result-banner__score { font-size: 26px; margin-right: auto; }

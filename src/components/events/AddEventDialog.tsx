@@ -100,7 +100,7 @@ export function AddEventDialog() {
     const el = ref.current
     if (!el) return
     if (addDialog.open && !el.open) {
-      setForm(initial(addDialog.date ?? todayISO(new Date())))
+      setForm({ ...initial(addDialog.date ?? todayISO(new Date())), ...(addDialog.type ? { type: addDialog.type } : {}) })
       setErrors({})
       setServerError('')
       el.showModal()

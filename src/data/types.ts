@@ -12,6 +12,11 @@ export interface CalendarEvent {
   opponent?: string
   status?: BookingStatus // scrims only
   notes?: string
+  /** Series result (scrims): games won / lost */
+  scoreUs?: number
+  scoreThem?: number
+  /** Dota match IDs for Dotabuff/OpenDota links */
+  matchIds?: string[]
   /** 'official' = tournament match from public data (read-only) */
   source?: 'official'
   /** Links an official event to its series for the match popup */

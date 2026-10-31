@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import type { CalendarEvent } from '../../data/types'
 import { useEvents } from '../../data/events'
 import { countdown, matchTime, parseDay } from '../../lib/format'
@@ -102,7 +103,7 @@ export function ScrimSchedule({ events, today }: { events: CalendarEvent[]; toda
     <section className="card" aria-labelledby="ss-title">
       <div className="card__head">
         <h2 id="ss-title" className="card__title">Scrim schedule</h2>
-        <a href="#scrims" className="link">Book scrim →</a>
+        <Link to="/scrims" className="link">All scrims →</Link>
       </div>
       {list.length === 0 ? (
         <p className="muted">No scrims booked.</p>

@@ -39,6 +39,9 @@ interface EventRow {
   opponent: string | null
   status: string | null
   notes: string | null
+  score_us?: number | null
+  score_them?: number | null
+  match_ids?: string | null
 }
 
 const SCHEMA = [
@@ -57,11 +60,21 @@ const SCHEMA = [
   'CREATE INDEX IF NOT EXISTS events_date ON events (date, time)',
 ]
 
+/** Columns added after the first release; ALTER fails harmlessly if they already exist. */
+const MIGRATIONS = [
+  'ALTER TABLE events ADD COLUMN score_us INTEGER',
+  'ALTER TABLE events ADD COLUMN score_them INTEGER',
+  'ALTER TABLE events ADD COLUMN match_ids TEXT',
+]
+
 let schemaReady: Promise<unknown> | null = null
 /** Create the table on first use, once per Worker instance. */
 function ensureSchema(db: D1Database) {
   schemaReady ??= (async () => {
     for (const sql of SCHEMA) await db.prepare(sql).run()
+    for (const sql of MIGRATIONS) {
+      try { await db.prepare(sql).run() } catch { /* column already exists */ }
+    }
   })().catch((err) => {
     schemaReady = null
     throw err
@@ -89,7 +102,45 @@ function toEvent(r: EventRow) {
     ...(r.opponent ? { opponent: r.opponent } : {}),
     ...(r.status ? { status: r.status } : {}),
     ...(r.notes ? { notes: r.notes } : {}),
+    ...(r.score_us != null && r.score_them != null ? { scoreUs: r.score_us, scoreThem: r.score_them } : {}),
+    ...(r.match_ids ? { matchIds: r.match_ids.split(',') } : {}),
   }
+}
+
+/** Validate a PATCH body: status, result (scoreUs/scoreThem), matchIds, notes. null clears a field. */
+function parsePatch(body: unknown): Record<string, unknown> | string {
+  if (!body || typeof body !== 'object') return 'Invalid body.'
+  const b = body as Record<string, unknown>
+  const out: Record<string, unknown> = {}
+  if ('status' in b) {
+    if (b.status !== null && !STATUSES.includes(b.status as (typeof STATUSES)[number])) return 'Unknown status.'
+    out.status = b.status
+  }
+  if ('scoreUs' in b || 'scoreThem' in b) {
+    const us = b.scoreUs, them = b.scoreThem
+    if (us === null && them === null) { out.score_us = null; out.score_them = null }
+    else {
+      const ok = (n: unknown) => Number.isInteger(n) && (n as number) >= 0 && (n as number) <= 9
+      if (!ok(us) || !ok(them)) return 'Scores must be whole numbers from 0 to 9.'
+      out.score_us = us; out.score_them = them
+    }
+  }
+  if ('matchIds' in b) {
+    if (b.matchIds === null) out.match_ids = null
+    else {
+      if (!Array.isArray(b.matchIds) || b.matchIds.length > 9) return 'Up to 9 match IDs.'
+      const ids = b.matchIds.map((x) => String(x).trim()).filter(Boolean)
+      if (!ids.every((x) => /^\d{6,12}$/.test(x))) return 'Match IDs must be numbers (6–12 digits).'
+      out.match_ids = ids.length ? ids.join(',') : null
+    }
+  }
+  if ('notes' in b) {
+    const notes = b.notes == null ? null : str(b.notes, 500)
+    if (b.notes != null && notes === null) return 'Notes are too long (max 500 characters).'
+    out.notes = notes || null
+  }
+  if (Object.keys(out).length === 0) return 'Nothing to update.'
+  return out
 }
 
 function str(v: unknown, max: number): string | null {
@@ -156,6 +207,20 @@ async function handleApi(request: Request, env: Env, url: URL): Promise<Response
       'INSERT INTO events (id, date, time, type, title, detail, opponent, status, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
     ).bind(newId, parsed.date, parsed.time, parsed.type, parsed.title, parsed.detail, parsed.opponent, parsed.status, parsed.notes).run()
     return json({ event: toEvent({ id: newId, ...parsed }) }, 201)
+  }
+
+  if (request.method === 'PATCH' && id) {
+    if (!authorized(request, env)) return error(401, 'Team code required.')
+    let body: unknown
+    try { body = await request.json() } catch { return error(400, 'Body must be JSON.') }
+    const patch = parsePatch(body)
+    if (typeof patch === 'string') return error(400, patch)
+    const cols = Object.keys(patch)
+    const { meta } = await env.DB.prepare(`UPDATE events SET ${cols.map((c) => `${c} = ?`).join(', ')} WHERE id = ?`)
+      .bind(...cols.map((c) => patch[c]), id).run()
+    if (!meta.changes) return error(404, 'Event not found.')
+    const row = await env.DB.prepare('SELECT * FROM events WHERE id = ?').bind(id).first<EventRow>()
+    return json({ event: row ? toEvent(row) : null })
   }
 
   if (request.method === 'DELETE' && id) {

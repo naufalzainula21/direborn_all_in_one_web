@@ -44,6 +44,18 @@ export function createEvent(event: NewEvent): Promise<{ event: CalendarEvent }> 
   return request('/api/events', { method: 'POST', body: JSON.stringify(event) })
 }
 
+export interface EventPatch {
+  status?: 'confirmed' | 'pending' | 'played' | null
+  scoreUs?: number | null
+  scoreThem?: number | null
+  matchIds?: string[] | null
+  notes?: string | null
+}
+
+export function updateEvent(id: string, patch: EventPatch): Promise<{ event: CalendarEvent }> {
+  return request(`/api/events/${encodeURIComponent(id)}`, { method: 'PATCH', body: JSON.stringify(patch) })
+}
+
 export function deleteEvent(id: string): Promise<{ ok: true }> {
   return request(`/api/events/${encodeURIComponent(id)}`, { method: 'DELETE' })
 }
