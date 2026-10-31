@@ -29,6 +29,10 @@ interface EventsState {
   openMatch: (seriesKey: string) => void
   matchKey: string | null
   closeMatch: () => void
+  /** Open details for any schedule event (official events open the match popup). */
+  openEvent: (e: CalendarEvent) => void
+  eventDetail: CalendarEvent | null
+  closeEvent: () => void
 }
 
 const EventsContext = createContext<EventsState | null>(null)
@@ -42,6 +46,7 @@ export function EventsProvider({ children }: { children: ReactNode }) {
   const [games, setGames] = useState<Game[]>([])
   const [addDialog, setAddDialog] = useState<{ open: boolean; date?: string }>({ open: false })
   const [matchKey, setMatchKey] = useState<string | null>(null)
+  const [eventDetail, setEventDetail] = useState<CalendarEvent | null>(null)
 
   useEffect(() => {
     let cancelled = false
@@ -67,16 +72,22 @@ export function EventsProvider({ children }: { children: ReactNode }) {
   const remove = useCallback(async (id: string) => {
     await deleteEvent(id)
     setTeamEvents((list) => list.filter((e) => e.id !== id))
+    setEventDetail(null)
   }, [])
 
   const openAdd = useCallback((date?: string) => setAddDialog({ open: true, date }), [])
   const closeAdd = useCallback(() => setAddDialog({ open: false }), [])
   const openMatch = useCallback((key: string) => setMatchKey(key), [])
   const closeMatch = useCallback(() => setMatchKey(null), [])
+  const openEvent = useCallback((e: CalendarEvent) => {
+    if (e.seriesKey) setMatchKey(e.seriesKey)
+    else setEventDetail(e)
+  }, [])
+  const closeEvent = useCallback(() => setEventDetail(null), [])
 
   const value = useMemo(
-    () => ({ events, source, games, series, add, remove, openAdd, addDialog, closeAdd, openMatch, matchKey, closeMatch }),
-    [events, source, games, series, add, remove, openAdd, addDialog, closeAdd, openMatch, matchKey, closeMatch],
+    () => ({ events, source, games, series, add, remove, openAdd, addDialog, closeAdd, openMatch, matchKey, closeMatch, openEvent, eventDetail, closeEvent }),
+    [events, source, games, series, add, remove, openAdd, addDialog, closeAdd, openMatch, matchKey, closeMatch, openEvent, eventDetail, closeEvent],
   )
   return <EventsContext.Provider value={value}>{children}</EventsContext.Provider>
 }

@@ -48,6 +48,17 @@ function Chip({ e }: { e: CalendarEvent }) {
   )
 }
 
+/** Clickable chip (used where it isn't inside another button). */
+function ChipButton({ e }: { e: CalendarEvent }) {
+  const { openEvent } = useEvents()
+  return (
+    <button type="button" className={`chip chip--${e.type} chip--btn`} onClick={() => openEvent(e)}
+      aria-label={`${e.time} ${e.title}${e.opponent ? ` vs ${e.opponent}` : ''}. Details`}>
+      <strong>{e.time}</strong> {e.opponent && e.type !== 'practice' ? `vs ${e.opponent}` : CHIP_LABEL[e.type]}
+    </button>
+  )
+}
+
 export function ScheduleBrowser({ events, today }: { events: CalendarEvent[]; today: string }) {
   const [view, setView] = useState<ScheduleView>(loadView)
   const [cursor, setCursor] = useState(today)
@@ -156,7 +167,7 @@ export function ScheduleBrowser({ events, today }: { events: CalendarEvent[]; to
 }
 
 function DayView({ date, events }: { date: string; events: CalendarEvent[] }) {
-  const { openAdd, remove, source, openMatch } = useEvents()
+  const { openAdd, remove, source, openEvent } = useEvents()
   const [busy, setBusy] = useState<string | null>(null)
   const [error, setError] = useState('')
 
@@ -188,15 +199,13 @@ function DayView({ date, events }: { date: string; events: CalendarEvent[] }) {
         <li key={e.id} className="day-list__item">
           <span className="day-list__time">{e.time}</span>
           <span className={`dot dot--lg dot--${e.type}`} />
-          <span className="day-list__text">
-            <span className="day-list__title">{e.title}</span>
+          <button type="button" className="day-list__text day-list__open" onClick={() => openEvent(e)}>
+            <span className="day-list__title">{e.opponent && e.type === 'tournament' ? `${e.title} · vs ${e.opponent}` : e.title}</span>
             <span className="muted small">{e.detail}</span>
             {e.notes && <span className="day-list__notes">{e.notes}</span>}
-          </span>
+          </button>
           <span className={`badge badge--type-${e.type}`}>{TYPE_LABEL[e.type]}</span>
-          {e.source === 'official' && e.seriesKey && (
-            <button type="button" className="ghost-btn day-list__summary" onClick={() => openMatch(e.seriesKey!)}>Summary</button>
-          )}
+          <button type="button" className="ghost-btn day-list__summary" onClick={() => openEvent(e)}>Details</button>
           {source === 'db' && e.source !== 'official' && (
             <button type="button" className="icon-btn icon-btn--sm" aria-label={`Delete ${e.title}`} disabled={busy === e.id} onClick={() => onDelete(e)}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" /></svg>
@@ -224,7 +233,7 @@ function WeekView({ start, today, byDate }: { start: string; today: string; byDa
               <span className="week-day__head">
                 {DOW[d.getDay()]} {d.getDate()}{isToday ? ' · Today' : ''}
               </span>
-              {list.length === 0 ? <span className="week-day__rest">Rest</span> : list.map((e) => <Chip key={e.id} e={e} />)}
+              {list.length === 0 ? <span className="week-day__rest">Rest</span> : list.map((e) => <ChipButton key={e.id} e={e} />)}
             </div>
           )
         })}

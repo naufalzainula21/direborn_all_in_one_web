@@ -68,7 +68,7 @@ export function NextTournamentCard({ t, now }: { t?: TournamentSummary; now: Dat
 }
 
 export function TournamentSchedule({ events, today }: { events: CalendarEvent[]; today: string }) {
-  const { openMatch } = useEvents()
+  const { openEvent } = useEvents()
   const list = events.filter((e) => e.type === 'tournament' && e.date >= today).slice(0, 5)
   return (
     <section className="card" aria-labelledby="ts-title">
@@ -79,8 +79,7 @@ export function TournamentSchedule({ events, today }: { events: CalendarEvent[];
         <ul className="side-list">
           {list.map((e) => (
             <li key={e.id}>
-              <button type="button" className="side-list__item side-list__item--btn" disabled={!e.seriesKey}
-                onClick={() => e.seriesKey && openMatch(e.seriesKey)}>
+              <button type="button" className="side-list__item side-list__item--btn" onClick={() => openEvent(e)}>
                 <DateBox iso={e.date} today={today} />
                 <span className="side-list__text">
                   <span className="side-list__title side-list__title--display">{e.title}</span>
@@ -97,6 +96,7 @@ export function TournamentSchedule({ events, today }: { events: CalendarEvent[];
 }
 
 export function ScrimSchedule({ events, today }: { events: CalendarEvent[]; today: string }) {
+  const { openEvent } = useEvents()
   const list = events.filter((e) => e.type === 'scrim' && e.date >= today).slice(0, 6)
   return (
     <section className="card" aria-labelledby="ss-title">
@@ -109,7 +109,8 @@ export function ScrimSchedule({ events, today }: { events: CalendarEvent[]; toda
       ) : (
         <ul className="side-list">
           {list.map((e) => (
-            <li key={e.id} className="side-list__item">
+            <li key={e.id}>
+              <button type="button" className="side-list__item side-list__item--btn" onClick={() => openEvent(e)}>
               <DateBox iso={e.date} today={today} />
               <span className="side-list__text">
                 <span className="side-list__title">{e.opponent}</span>
@@ -117,6 +118,7 @@ export function ScrimSchedule({ events, today }: { events: CalendarEvent[]; toda
               </span>
               {e.status === 'confirmed' && <span className="badge badge--win">Confirmed</span>}
               {e.status === 'pending' && <span className="badge badge--review">Pending</span>}
+              </button>
             </li>
           ))}
         </ul>

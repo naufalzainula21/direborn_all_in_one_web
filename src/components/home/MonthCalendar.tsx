@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import type { CalendarEvent, EventType } from '../../data/types'
 import { parseDay, toISODate } from '../../lib/format'
 import { Icon } from '../Icon'
+import { useEvents } from '../../data/events'
 
 const WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 const LABEL: Record<EventType, string> = { scrim: 'Scrim', tournament: 'Match', practice: 'Practice', other: 'Session' }
@@ -28,6 +29,7 @@ export function MonthCalendar({ events, today }: { events: CalendarEvent[]; toda
   const todayIso = toISODate(today)
   const [view, setView] = useState({ year: today.getFullYear(), month: today.getMonth() })
   const [selected, setSelected] = useState(todayIso)
+  const { openEvent } = useEvents()
 
   const byDate = useMemo(() => {
     const map = new Map<string, CalendarEvent[]>()
@@ -123,9 +125,16 @@ export function MonthCalendar({ events, today }: { events: CalendarEvent[]; toda
         ) : (
           <ul className="agenda">
             {selectedEvents.map((e) => (
-              <li key={e.id} className="agenda__item">
-                <span className={`chip chip--${e.type}`}>{AGENDA_LABEL[e.type]}</span>
-                <span className="agenda__time">{e.time} WIB</span>
+              <li key={e.id}>
+                <button type="button" className="agenda__item agenda__item--btn" onClick={() => openEvent(e)}>
+                  <span className="agenda__time">{e.time === 'TBD' ? 'TBD' : e.time}</span>
+                  <span className={`dot dot--lg dot--${e.type}`} />
+                  <span className="agenda__text">
+                    <span className="agenda__title">{e.opponent && e.type !== 'scrim' ? `${e.title} · vs ${e.opponent}` : e.title}</span>
+                    <span className="muted small">{e.detail}</span>
+                  </span>
+                  <span className={`chip chip--${e.type}`}>{AGENDA_LABEL[e.type]}</span>
+                </button>
               </li>
             ))}
           </ul>

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useEvents } from '../../data/events'
-import { dotabuffMatch, duration } from '../../data/tournaments'
-import { parseDay } from '../../lib/format'
+import { dotabuffMatch, duration, running } from '../../data/tournaments'
+import { countdown, parseDay } from '../../lib/format'
 import { Scoreboard } from './Scoreboard'
 
 /** Popup with a series summary and the match scoreboard. Opened from any page via openMatch(). */
@@ -23,6 +23,21 @@ export function MatchDialog() {
   }, [s])
 
   const game = s?.games.find((g) => g.id === gameId) ?? null
+  const sgt = (t: string) => { const [h, m] = t.split(':').map(Number); return `${String((h + 1) % 24).padStart(2, '0')}:${String(m).padStart(2, '0')}` }
+  const start = s && s.time !== 'TBD' ? `${s.date}T${s.time}:00+07:00` : null
+  const oppRow = s && s.tourKey === 'EPL S19' ? running.standings.findIndex(([t]) => t === s.opp) : -1
+  const usRow = running.standings.findIndex(([t]) => t === 'Direborn')
+  const facts: [string, string][] = s ? [
+    ['Tournament', s.tournament],
+    ...(s.stage ? [['Stage', s.stage] as [string, string]] : []),
+    ['Format', s.format],
+    ['Time', s.time === 'TBD' ? 'To be confirmed' : `${s.time} WIB · ${sgt(s.time)} SGT`],
+    ['Status', s.won === null ? (start ? countdown(start, new Date()) : 'Upcoming') : `${s.won ? 'Won' : 'Lost'} ${s.w}–${s.l}`],
+    ...(oppRow >= 0 ? [
+      ['Opponent in standings', `${oppRow + 1}. ${s.opp} · ${running.standings[oppRow][1]} (games ${running.standings[oppRow][2]})`] as [string, string],
+      ['Direborn in standings', `${usRow + 1}. Direborn · ${running.standings[usRow][1]} (games ${running.standings[usRow][2]})`] as [string, string],
+    ] : []),
+  ] : []
   const dateLabel = s ? parseDay(s.date).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }) : ''
 
   return (
@@ -46,6 +61,12 @@ export function MatchDialog() {
           </header>
 
           <div className="sheet__body">
+            <dl className="facts">
+              {facts.map(([k, v]) => (
+                <div key={k} className="facts__item"><dt>{k}</dt><dd>{v}</dd></div>
+              ))}
+            </dl>
+            {s.note && <p className="notice">{s.note}</p>}
             {s.games.length > 0 ? (
               <>
                 <div className="series__games">
@@ -66,7 +87,7 @@ export function MatchDialog() {
             ) : (
               <p className="notice">
                 {s.won === null
-                  ? 'This match hasn’t been played yet. The summary appears here after the game.'
+                  ? 'Not played yet. Scoreboards appear here after the games.'
                   : 'Game scoreboards for this series aren’t in OpenDota yet, so only the series score is shown.'}
               </p>
             )}

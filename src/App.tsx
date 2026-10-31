@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AddEventDialog } from './components/events/AddEventDialog'
 import { MatchDialog } from './components/tournaments/MatchDialog'
+import { EventDialog } from './components/events/EventDialog'
 import { AppShell } from './components/layout/AppShell'
 import { EventsProvider } from './data/events'
 import { Home } from './pages/Home'
@@ -30,6 +31,7 @@ export default function App() {
         </AppShell>
         <AddEventDialog />
         <MatchDialog />
+        <EventDialog />
       </EventsProvider>
     </BrowserRouter>
   )

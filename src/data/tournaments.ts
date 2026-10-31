@@ -78,20 +78,20 @@ export const running = {
     ['Team Nemesis Academy', '0–7', '1–14'],
   ] as [string, string, string][],
   matches: [
-    { date: '26 Oct', opp: 'Team Kinetix', score: '2–0', res: 'W' },
     { date: '26 Oct', opp: 'Cloud Dawning', score: '2–0', res: 'W' },
+    { date: '26 Oct', opp: 'Team Kinetix', score: '2–0', res: 'W' },
     { date: '28 Oct', opp: 'Yangon Galacticos', score: '2–0', res: 'W' },
     { date: '29 Oct', opp: 'Team Nemesis Academy', score: '2–0', res: 'W' },
     { date: '30 Oct', opp: 'Resp Gaming', score: '2–0', res: 'W' },
     { date: '31 Oct', opp: 'Royal Bear', score: '0–2', res: 'L' },
-    { date: '~2 Nov', opp: 'ZENITH', score: '–', res: 'Next' },
+    { date: '2 Nov', opp: 'ZENITH', score: '–', res: 'Next' },
   ] as { date: string; opp: string; score: string; res: 'W' | 'L' | 'Next' }[],
 }
 
 export const nextMatch = {
   label: 'Next match · EPL S19 group stage',
   title: 'Direborn vs ZENITH',
-  detail: 'Around Mon 2 Nov · Bo3 · time to be confirmed',
+  detail: 'Mon 2 Nov · 14:00 WIB · Bo3',
 }
 
 export const upcoming: { name: string; status: string; tone: Tone; qual: string; main: string }[] = [
@@ -102,7 +102,7 @@ export const upcoming: { name: string; status: string; tone: Tone; qual: string;
 ]
 
 export const calendar: { mon: string; day: string; title: string; sub: string; next?: boolean }[] = [
-  { mon: 'Nov', day: '2', title: 'EPL S19 · vs ZENITH', sub: 'Last group match · time TBC', next: true },
+  { mon: 'Nov', day: '2', title: 'EPL S19 · vs ZENITH', sub: 'Last group match · 14:00 WIB', next: true },
   { mon: 'Nov', day: '5', title: 'EPL S19 · playoffs end', sub: 'Double elimination Bo3' },
   { mon: 'Dec', day: '2', title: 'DreamLeague S30 main event', sub: '2–13 Dec · not qualified' },
   { mon: 'Dec', day: '?', title: 'DreamLeague S31 SEA qualifiers', sub: 'Estimate · watch for announcement' },

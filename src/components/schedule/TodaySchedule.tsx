@@ -1,12 +1,14 @@
 import type { CalendarEvent } from '../../data/types'
 import { nowHHMM, parseDay, todayISO } from '../../lib/format'
 import { TYPE_LABEL } from './meta'
+import { useEvents } from '../../data/events'
 
 type Status = 'done' | 'next' | 'later'
 const STATUS_LABEL: Record<Status, string> = { done: 'Done', next: 'Up next', later: 'Later' }
 
 export function TodaySchedule({ events, now }: { events: CalendarEvent[]; now: Date }) {
   const today = todayISO(now)
+  const { openEvent } = useEvents()
   const time = nowHHMM(now)
   const items = events.filter((e) => e.date === today)
   const nextIndex = items.findIndex((e) => e.time === 'TBD' || e.time > time)
@@ -31,17 +33,17 @@ export function TodaySchedule({ events, now }: { events: CalendarEvent[]; now: D
           {items.map((e, i) => {
             const status: Status = nextIndex === -1 || i < nextIndex ? 'done' : i === nextIndex ? 'next' : 'later'
             return (
-              <article key={e.id} className={`today-card${e.type === 'tournament' ? ' today-card--match' : ''}`}>
-                <div className="today-card__top">
+              <button type="button" key={e.id} onClick={() => openEvent(e)} className={`today-card today-card--btn${e.type === 'tournament' ? ' today-card--match' : ''}`}>
+                <span className="today-card__top">
                   <span className="today-card__time">{e.time}</span>
                   <span className={`status status--${status}`}>{STATUS_LABEL[status]}</span>
-                </div>
+                </span>
                 <span className={`badge badge--type-${e.type}`}>
                   {e.type === 'tournament' ? 'Tournament match' : TYPE_LABEL[e.type]}
                 </span>
-                <h3 className="today-card__title">{e.title}</h3>
-                <p className="today-card__detail">{e.detail}</p>
-              </article>
+                <span className="today-card__title">{e.opponent && e.type === 'tournament' ? `vs ${e.opponent}` : e.title}</span>
+                <span className="today-card__detail">{e.type === 'tournament' ? `${e.title} · ${e.detail}` : e.detail}</span>
+              </button>
             )
           })}
         </div>

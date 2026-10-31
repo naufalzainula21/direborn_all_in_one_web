@@ -15,6 +15,9 @@ export interface OfficialSeries {
   /** null = not played yet */
   won: boolean | null
   games: Game[]
+  format: string
+  stage?: string
+  note?: string
 }
 
 const pad = (n: number) => String(n).padStart(2, '0')
@@ -38,15 +41,15 @@ const SHORT: Record<string, string> = {
 }
 export const shortTournament = (key: string) => SHORT[key] ?? pastTournaments.find((t) => t.key === key)?.name ?? key
 
-/** EPL S19 series (from Hawk Live). Times in WIB where known. */
-const S19: { date: string; time: string; opp: string; w: number; l: number; played: boolean }[] = [
-  { date: '2026-10-26', time: 'TBD', opp: 'Team Kinetix', w: 2, l: 0, played: true },
-  { date: '2026-10-26', time: 'TBD', opp: 'Cloud Dawning', w: 2, l: 0, played: true },
+/** EPL S19 series. Times in WIB from the team's schedule (SGT = WIB + 1h). */
+const S19: { date: string; time: string; opp: string; w: number; l: number; played: boolean; note?: string }[] = [
+  { date: '2026-10-26', time: '11:00', opp: 'Cloud Dawning', w: 2, l: 0, played: true },
+  { date: '2026-10-26', time: '14:00', opp: 'Team Kinetix', w: 2, l: 0, played: true },
   { date: '2026-10-28', time: '14:00', opp: 'Yangon Galacticos', w: 2, l: 0, played: true },
-  { date: '2026-10-29', time: 'TBD', opp: 'Team Nemesis Academy', w: 2, l: 0, played: true },
-  { date: '2026-10-30', time: 'TBD', opp: 'Resp Gaming', w: 2, l: 0, played: true },
+  { date: '2026-10-29', time: '17:00', opp: 'Team Nemesis Academy', w: 2, l: 0, played: true },
+  { date: '2026-10-30', time: '14:00', opp: 'Resp Gaming', w: 2, l: 0, played: true },
   { date: '2026-10-31', time: '11:00', opp: 'Royal Bear', w: 0, l: 2, played: true },
-  { date: '2026-11-02', time: 'TBD', opp: 'ZENITH', w: 0, l: 0, played: false },
+  { date: '2026-11-02', time: '14:00', opp: 'ZENITH', w: 0, l: 0, played: false, note: 'Rescheduled from Tue 27 Oct (match day cancelled)' },
 ]
 
 export function buildOfficialSeries(games: Game[]): OfficialSeries[] {
@@ -57,6 +60,7 @@ export function buildOfficialSeries(games: Game[]): OfficialSeries[] {
       out.push({
         key: `${t.key}|${s.games[0].id}`, date, time, tournament: shortTournament(t.key), tourKey: t.key,
         opp: s.opp, w: s.w, l: s.l, won: s.won, games: s.games,
+        format: s.games.length >= 3 || s.w === 2 || s.l === 2 ? 'Bo3' : `Bo${s.games.length}`,
       })
     }
   }
@@ -64,6 +68,7 @@ export function buildOfficialSeries(games: Game[]): OfficialSeries[] {
     out.push({
       key: `EPL S19|${m.date}|${m.opp}`, date: m.date, time: m.time, tournament: shortTournament('EPL S19'), tourKey: 'EPL S19',
       opp: m.opp, w: m.w, l: m.l, won: m.played ? m.w > m.l : null, games: [],
+      format: 'Bo3', stage: 'Group stage · round robin', note: m.note,
     })
   }
   // Newest first (TBD sorts as end of day)
@@ -78,7 +83,7 @@ export function officialEvents(series: OfficialSeries[]): CalendarEvent[] {
     time: s.time,
     type: 'tournament',
     title: s.tournament,
-    detail: s.won === null ? `vs ${s.opp} · Bo3` : `${s.won ? 'Won' : 'Lost'} ${s.w}–${s.l} vs ${s.opp}`,
+    detail: s.won === null ? `vs ${s.opp} · ${s.format}` : `${s.won ? 'Won' : 'Lost'} ${s.w}–${s.l} vs ${s.opp}`,
     opponent: s.opp,
     source: 'official',
     seriesKey: s.key,
