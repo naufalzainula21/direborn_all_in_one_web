@@ -4,6 +4,7 @@ import { AddEventDialog } from './components/events/AddEventDialog'
 import { MatchDialog } from './components/tournaments/MatchDialog'
 import { EventDialog } from './components/events/EventDialog'
 import { ScrimResultDialog } from './components/events/ScrimResultDialog'
+import { ScrimReportDialog } from './components/events/ScrimReportDialog'
 import { Scrims } from './pages/Scrims'
 import { AppShell } from './components/layout/AppShell'
 import { EventsProvider } from './data/events'
@@ -38,6 +39,7 @@ export default function App() {
         <MatchDialog />
         <EventDialog />
         <ScrimResultDialog />
+        <ScrimReportDialog />
       </EventsProvider>
     </BrowserRouter>
   )

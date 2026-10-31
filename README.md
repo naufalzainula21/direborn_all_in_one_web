@@ -95,7 +95,7 @@ public/
 ## Next steps
 
 - Edit existing events
-- Results: record scrim and tournament scores
+- Scrim report: re-run `python3 scripts/import_scrim_report.py <report.xlsx>` after updating the sheet
 - Nightly sync: new official games from OpenDota, SEA qualifiers from Liquipedia API
 - Roster page
 - Team stats page

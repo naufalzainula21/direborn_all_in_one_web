@@ -5,6 +5,7 @@ import { countdown, longToday, parseDay, todayISO } from '../lib/format'
 import { startISO } from '../lib/schedule'
 import { hasResult, isPast, opponentOf, outcomeOf, OUTCOME_LABEL, OUTCOME_TONE } from '../lib/scrims'
 import { Icon } from '../components/Icon'
+import { pct, reportNotes, reportPhases, reportSeries, reportSplits, phaseShort, type SplitRecord } from '../data/scrimReport'
 
 const PER_PAGE = 5
 
@@ -16,6 +17,72 @@ function DateBox({ iso, today }: { iso: string; today: string }) {
       <span className="date-box__dow">{isToday ? 'Today' : d.toLocaleDateString('en-GB', { weekday: 'short' })}</span>
       <span className="date-box__num">{d.getDate()} {d.toLocaleDateString('en-GB', { month: 'short' })}</span>
     </span>
+  )
+}
+
+function SplitBars({ rows }: { rows: SplitRecord[] }) {
+  return (
+    <ul className="split-bars">
+      {rows.map((r) => (
+        <li key={r.label} className="split-bars__row">
+          <span className="split-bars__label">{r.label}</span>
+          <span className="split-bars__track" aria-hidden="true"><span className="split-bars__fill" style={{ width: `${pct(r)}%` }} /></span>
+          <span className="split-bars__value"><strong>{r.w + r.l ? `${pct(r)}%` : '—'}</strong> <span className="muted">{r.w}–{r.l}</span></span>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+function ReportCard() {
+  const { openEvent, events } = useEvents()
+  const [phase, setPhase] = useState('all')
+  const list = phase === 'all' ? reportSeries : reportSeries.filter((x) => x.phase === phase)
+  const sp = reportSplits(list)
+  const notes = reportNotes()
+  const evFor = (key: string) => events.find((e) => e.reportKey === key)
+  return (
+    <section className="card" aria-labelledby="report-title-card">
+      <div className="card__head">
+        <div className="card__title-row">
+          <h2 id="report-title-card" className="card__title">Scrim report</h2>
+          <span className="muted small">{list.length} scrims · {sp.all.w + sp.all.l} games</span>
+        </div>
+      </div>
+      <div className="segmented segmented--wrap" role="group" aria-label="Roster phase">
+        {[{ id: 'all', label: 'All' }, ...[...reportPhases].reverse()].map((p) => (
+          <button key={p.id} type="button" className={`segmented__btn${phase === p.id ? ' is-active' : ''}`} aria-pressed={phase === p.id} onClick={() => setPhase(p.id)}>
+            {p.id === 'all' ? 'All' : phaseShort(p.id)}
+          </button>
+        ))}
+      </div>
+      <div className="report-split">
+        <div><h3 className="report-split__title">Game win rate</h3><SplitBars rows={[sp.all]} /></div>
+        <div><h3 className="report-split__title">By side</h3><SplitBars rows={sp.side} /></div>
+        <div><h3 className="report-split__title">By draft</h3><SplitBars rows={sp.pick} /></div>
+        {phase === 'all' && <div><h3 className="report-split__title">By roster phase</h3><SplitBars rows={[...sp.phase].reverse()} /></div>}
+      </div>
+      {notes.length > 0 && phase === 'all' && (
+        <div>
+          <h3 className="report-split__title">Feedback</h3>
+          <ul className="side-list">
+            {notes.map((n) => {
+              const ev = evFor(n.series.key)
+              return (
+                <li key={`${n.series.key}-${n.game}`}>
+                  <button type="button" className="side-list__item side-list__item--btn" disabled={!ev} onClick={() => ev && openEvent(ev)}>
+                    <span className="side-list__text">
+                      <span className="side-list__title">“{n.note}”</span>
+                      <span className="muted small">vs {n.series.opp} · G{n.game} · {parseDay(n.series.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</span>
+                    </span>
+                  </button>
+                </li>
+              )
+            })}
+          </ul>
+        </div>
+      )}
+    </section>
   )
 }
 
@@ -45,7 +112,7 @@ function ResultsPager({ list, today }: { list: CalendarEvent[]; today: string })
                     <DateBox iso={e.date} today={today} />
                     <span className="match-row__main">
                       <span className="match-row__opp">vs {opponentOf(e)}</span>
-                      <span className="muted small">{e.time} WIB · {e.detail}{e.matchIds?.length ? ` · ${e.matchIds.length} game ${e.matchIds.length === 1 ? 'link' : 'links'}` : ''}</span>
+                      <span className="muted small">{e.source === 'report' ? '' : `${e.time} WIB · `}{e.detail}{e.matchIds?.length ? ` · ${e.matchIds.length} game ${e.matchIds.length === 1 ? 'link' : 'links'}` : ''}</span>
                     </span>
                     <span className="score">{e.scoreUs}–{e.scoreThem}</span>
                     <span className={`badge badge--${OUTCOME_TONE[o]}`}>{OUTCOME_LABEL[o]}</span>
@@ -198,6 +265,7 @@ export function Scrims({ now }: { now: Date }) {
         </div>
 
         <div className="stack">
+          <ReportCard />
           <section className="card" aria-labelledby="opp-title">
             <h2 id="opp-title" className="card__title">Record by opponent</h2>
             {byOpp.length === 0 ? <p className="muted small">Shows once results are in.</p> : (
@@ -223,6 +291,7 @@ export function Scrims({ now }: { now: Date }) {
               <li><strong>Book scrim</strong> with the opponent, time and format. Mark it Pending until they confirm.</li>
               <li>After you play, it moves to <strong>Needs a result</strong>. Enter the score.</li>
               <li>Add match IDs if you want Dotabuff links for each game.</li>
+              <li>Older scrims come from the team report sheet. Tap one for sides, picks, kills, VODs and feedback.</li>
             </ol>
           </section>
         </div>

@@ -116,7 +116,7 @@ export function MonthCalendar({ events, today }: { events: CalendarEvent[]; toda
                   <span className="day__chips">
                     {dayEvents.map((e) => (
                       <span key={e.id} className={`chip chip--${e.type}`}>
-                        {LABEL[e.type]} {e.time}
+                        {LABEL[e.type]} {e.source === 'report' ? (e.scoreUs ?? 0) + '–' + (e.scoreThem ?? 0) : e.time}
                       </span>
                     ))}
                   </span>
@@ -152,7 +152,7 @@ export function MonthCalendar({ events, today }: { events: CalendarEvent[]; toda
                   {selectedEvents.map((e) => (
                     <li key={e.id}>
                       <button type="button" className="agenda__item agenda__item--btn" onClick={() => openFromDay(e)}>
-                        <span className="agenda__time">{e.time === 'TBD' ? 'TBD' : e.time}</span>
+                        <span className="agenda__time">{e.source === 'report' ? 'Played' : e.time}</span>
                         <span className={`dot dot--lg dot--${e.type}`} />
                         <span className="agenda__text">
                           <span className="agenda__title">{e.opponent && e.type !== 'scrim' ? `${e.title} · vs ${e.opponent}` : e.title}</span>

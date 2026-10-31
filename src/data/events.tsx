@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { createEvent, deleteEvent, fetchEvents, updateEvent, type EventPatch, type NewEvent } from './api'
 import { buildOfficialSeries, officialEvents, type OfficialSeries } from './official'
+import { reportEvents } from './scrimReport'
 import type { Game } from './tournaments'
 import type { CalendarEvent, EventType } from './types'
 
@@ -34,7 +35,10 @@ interface EventsState {
   openMatch: (seriesKey: string) => void
   matchKey: string | null
   closeMatch: () => void
-  /** Open details for any schedule event (official events open the match popup). */
+  /** Scrim report popup (games from the team's report sheet). */
+  reportKey: string | null
+  closeReport: () => void
+  /** Open details for any schedule event (official events open the match popup, report scrims the report popup). */
   openEvent: (e: CalendarEvent) => void
   eventDetail: CalendarEvent | null
   closeEvent: () => void
@@ -53,6 +57,7 @@ export function EventsProvider({ children }: { children: ReactNode }) {
   const [resultFor, setResultFor] = useState<CalendarEvent | null>(null)
   const [matchKey, setMatchKey] = useState<string | null>(null)
   const [eventDetail, setEventDetail] = useState<CalendarEvent | null>(null)
+  const [reportKey, setReportKey] = useState<string | null>(null)
 
   useEffect(() => {
     let cancelled = false
@@ -67,7 +72,12 @@ export function EventsProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const series = useMemo(() => buildOfficialSeries(games), [games])
-  const events = useMemo(() => sortEvents([...teamEvents, ...officialEvents(series)]), [teamEvents, series])
+  const events = useMemo(() => {
+    // Skip report scrims the team already logged in the app (same day, same opponent).
+    const logged = new Set(teamEvents.filter((e) => e.type === 'scrim').map((e) => `${e.date}|${(e.opponent ?? '').toLowerCase()}`))
+    const report = reportEvents().filter((e) => !logged.has(`${e.date}|${e.opponent!.toLowerCase()}`))
+    return sortEvents([...teamEvents, ...officialEvents(series), ...report])
+  }, [teamEvents, series])
 
   const add = useCallback(async (e: NewEvent) => {
     const { event } = await createEvent(e)
@@ -96,13 +106,15 @@ export function EventsProvider({ children }: { children: ReactNode }) {
   const closeMatch = useCallback(() => setMatchKey(null), [])
   const openEvent = useCallback((e: CalendarEvent) => {
     if (e.seriesKey) setMatchKey(e.seriesKey)
+    else if (e.reportKey) setReportKey(e.reportKey)
     else setEventDetail(e)
   }, [])
   const closeEvent = useCallback(() => setEventDetail(null), [])
+  const closeReport = useCallback(() => setReportKey(null), [])
 
   const value = useMemo(
-    () => ({ events, source, games, series, add, remove, update, openResult, resultFor, closeResult, openAdd, addDialog, closeAdd, openMatch, matchKey, closeMatch, openEvent, eventDetail, closeEvent }),
-    [events, source, games, series, add, remove, update, openResult, resultFor, closeResult, openAdd, addDialog, closeAdd, openMatch, matchKey, closeMatch, openEvent, eventDetail, closeEvent],
+    () => ({ events, source, games, series, add, remove, update, openResult, resultFor, closeResult, openAdd, addDialog, closeAdd, openMatch, matchKey, closeMatch, openEvent, eventDetail, closeEvent, reportKey, closeReport }),
+    [events, source, games, series, add, remove, update, openResult, resultFor, closeResult, openAdd, addDialog, closeAdd, openMatch, matchKey, closeMatch, openEvent, eventDetail, closeEvent, reportKey, closeReport],
   )
   return <EventsContext.Provider value={value}>{children}</EventsContext.Provider>
 }

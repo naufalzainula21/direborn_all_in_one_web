@@ -1,0 +1,1638 @@
+{
+ "phases": [
+  {
+   "id": "original",
+   "label": "Original roster"
+  },
+  {
+   "id": "new-roster",
+   "label": "New roster (Dreamocel carry, db 4, deco 5)"
+  },
+  {
+   "id": "blast-prep",
+   "label": "BLAST Slam VIII preparation"
+  }
+ ],
+ "series": [
+  {
+   "key": "r20260523-0",
+   "date": "2026-05-23",
+   "opp": "M-Monster",
+   "phase": "original",
+   "w": 1,
+   "l": 1,
+   "games": [
+    {
+     "side": "Dire",
+     "pick": "1st",
+     "result": "W",
+     "kills": "27-11",
+     "matchId": "8821753547",
+     "vod": null,
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Radiant",
+     "pick": "1st",
+     "result": "L",
+     "kills": "55-78",
+     "matchId": null,
+     "vod": null,
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20260524-1",
+   "date": "2026-05-24",
+   "opp": "IAP",
+   "phase": "original",
+   "w": 1,
+   "l": 1,
+   "games": [
+    {
+     "side": "Dire",
+     "pick": "2nd",
+     "result": "W",
+     "kills": null,
+     "matchId": null,
+     "vod": null,
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Radiant",
+     "pick": "1st",
+     "result": "L",
+     "kills": "25-13",
+     "matchId": "8823377508",
+     "vod": null,
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20260527-2",
+   "date": "2026-05-27",
+   "opp": "M-Monster",
+   "phase": "original",
+   "w": 1,
+   "l": 1,
+   "games": [
+    {
+     "side": "Dire",
+     "pick": "2nd",
+     "result": "L",
+     "kills": "22-7",
+     "matchId": null,
+     "vod": null,
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Radiant",
+     "pick": "1st",
+     "result": "W",
+     "kills": "56-30",
+     "matchId": null,
+     "vod": null,
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20260528-3",
+   "date": "2026-05-28",
+   "opp": "M-Monster",
+   "phase": "original",
+   "w": 0,
+   "l": 2,
+   "games": [
+    {
+     "side": "Dire",
+     "pick": "2nd",
+     "result": "L",
+     "kills": "30-33",
+     "matchId": null,
+     "vod": null,
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Radiant",
+     "pick": "2nd",
+     "result": "L",
+     "kills": "12-45",
+     "matchId": null,
+     "vod": null,
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20260530-4",
+   "date": "2026-05-30",
+   "opp": "XCTN",
+   "phase": "original",
+   "w": 0,
+   "l": 2,
+   "games": [
+    {
+     "side": "Dire",
+     "pick": "2nd",
+     "result": "L",
+     "kills": "25-20",
+     "matchId": null,
+     "vod": null,
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Radiant",
+     "pick": "1st",
+     "result": "L",
+     "kills": "29-11",
+     "matchId": null,
+     "vod": null,
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20260530-5",
+   "date": "2026-05-30",
+   "opp": "Echo Chna Stack",
+   "phase": "original",
+   "w": 1,
+   "l": 0,
+   "games": [
+    {
+     "side": "Dire",
+     "pick": "2nd",
+     "result": "W",
+     "kills": "23-37",
+     "matchId": null,
+     "vod": null,
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": null,
+     "pick": null,
+     "result": null,
+     "kills": null,
+     "matchId": null,
+     "vod": null,
+     "note": null,
+     "status": "cancelled"
+    }
+   ]
+  },
+  {
+   "key": "r20260530-6",
+   "date": "2026-05-30",
+   "opp": "Cloud Rising",
+   "phase": "original",
+   "w": 2,
+   "l": 0,
+   "games": [
+    {
+     "side": "Dire",
+     "pick": "2nd",
+     "result": "W",
+     "kills": "29-39",
+     "matchId": null,
+     "vod": null,
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Radiant",
+     "pick": "1st",
+     "result": "W",
+     "kills": "35-47",
+     "matchId": null,
+     "vod": null,
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20260530-7",
+   "date": "2026-05-30",
+   "opp": "Satan666",
+   "phase": "original",
+   "w": 1,
+   "l": 1,
+   "games": [
+    {
+     "side": "Dire",
+     "pick": "2nd",
+     "result": "W",
+     "kills": "31-33",
+     "matchId": null,
+     "vod": null,
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Radiant",
+     "pick": "1st",
+     "result": "L",
+     "kills": "13-25",
+     "matchId": null,
+     "vod": null,
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20260601-8",
+   "date": "2026-06-01",
+   "opp": "Mercy Stack",
+   "phase": "original",
+   "w": 2,
+   "l": 0,
+   "games": [
+    {
+     "side": "Dire",
+     "pick": "2nd",
+     "result": "W",
+     "kills": "18-41",
+     "matchId": "8834099709",
+     "vod": null,
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Radiant",
+     "pick": "1st",
+     "result": "W",
+     "kills": "30-22",
+     "matchId": "8834142882",
+     "vod": null,
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20260601-9",
+   "date": "2026-06-01",
+   "opp": "Cloud Rising",
+   "phase": "original",
+   "w": 2,
+   "l": 0,
+   "games": [
+    {
+     "side": "Dire",
+     "pick": "2nd",
+     "result": "W",
+     "kills": "22-42",
+     "matchId": "8834243318",
+     "vod": null,
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Radiant",
+     "pick": "1st",
+     "result": "W",
+     "kills": "44-27",
+     "matchId": "8834298774",
+     "vod": null,
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20260602-10",
+   "date": "2026-06-02",
+   "opp": "Grindback",
+   "phase": "original",
+   "w": 0,
+   "l": 2,
+   "games": [
+    {
+     "side": "Radiant",
+     "pick": "1st",
+     "result": "L",
+     "kills": "18-48",
+     "matchId": "8835267795",
+     "vod": null,
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Dire",
+     "pick": "2nd",
+     "result": "L",
+     "kills": "31-26",
+     "matchId": "8835295369",
+     "vod": null,
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20260602-11",
+   "date": "2026-06-02",
+   "opp": "Carstenz",
+   "phase": "original",
+   "w": 1,
+   "l": 1,
+   "games": [
+    {
+     "side": "Dire",
+     "pick": "2nd",
+     "result": "L",
+     "kills": "37-12",
+     "matchId": "8835369298",
+     "vod": null,
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Radiant",
+     "pick": "1st",
+     "result": "W",
+     "kills": "29-18",
+     "matchId": "8835407461",
+     "vod": null,
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20260606-12",
+   "date": "2026-06-06",
+   "opp": "IAP",
+   "phase": "original",
+   "w": 0,
+   "l": 2,
+   "games": [
+    {
+     "side": "Radiant",
+     "pick": null,
+     "result": "L",
+     "kills": null,
+     "matchId": "8840383346",
+     "vod": null,
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Radiant",
+     "pick": null,
+     "result": "L",
+     "kills": null,
+     "matchId": "8840436702",
+     "vod": null,
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20260607-13",
+   "date": "2026-06-07",
+   "opp": "Mentality Monster",
+   "phase": "original",
+   "w": 0,
+   "l": 2,
+   "games": [
+    {
+     "side": "Dire",
+     "pick": null,
+     "result": "L",
+     "kills": null,
+     "matchId": "8841998892",
+     "vod": null,
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Radiant",
+     "pick": null,
+     "result": "L",
+     "kills": null,
+     "matchId": "8842052050",
+     "vod": null,
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20260607-14",
+   "date": "2026-06-07",
+   "opp": "Carstenz",
+   "phase": "original",
+   "w": 0,
+   "l": 2,
+   "games": [
+    {
+     "side": "Dire",
+     "pick": null,
+     "result": "L",
+     "kills": null,
+     "matchId": "8842217461",
+     "vod": null,
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Radiant",
+     "pick": null,
+     "result": "L",
+     "kills": null,
+     "matchId": "8842256506",
+     "vod": null,
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20260617-15",
+   "date": "2026-06-17",
+   "opp": "Vici Gaming",
+   "phase": "original",
+   "w": 0,
+   "l": 1,
+   "games": [
+    {
+     "side": "Dire",
+     "pick": null,
+     "result": "L",
+     "kills": null,
+     "matchId": "8855028774",
+     "vod": null,
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": null,
+     "pick": null,
+     "result": null,
+     "kills": null,
+     "matchId": null,
+     "vod": null,
+     "note": null,
+     "status": "cancelled"
+    }
+   ]
+  },
+  {
+   "key": "r20260617-16",
+   "date": "2026-06-17",
+   "opp": "XCTN",
+   "phase": "original",
+   "w": 1,
+   "l": 1,
+   "games": [
+    {
+     "side": "Dire",
+     "pick": null,
+     "result": "W",
+     "kills": null,
+     "matchId": null,
+     "vod": null,
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Radiant",
+     "pick": null,
+     "result": "L",
+     "kills": null,
+     "matchId": null,
+     "vod": null,
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20260718-17",
+   "date": "2026-07-18",
+   "opp": "GLYPH",
+   "phase": "new-roster",
+   "w": 2,
+   "l": 0,
+   "games": [
+    {
+     "side": "Dire",
+     "pick": "2nd",
+     "result": "W",
+     "kills": "41-41",
+     "matchId": "8901902443",
+     "vod": "https://youtube.com/live/6-ZWRxZDZBg",
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Radiant",
+     "pick": "1st",
+     "result": "W",
+     "kills": "35-15",
+     "matchId": "8901983665",
+     "vod": null,
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20260719-18",
+   "date": "2026-07-19",
+   "opp": "GLYPH",
+   "phase": "new-roster",
+   "w": 1,
+   "l": 1,
+   "games": [
+    {
+     "side": "Dire",
+     "pick": "2nd",
+     "result": "L",
+     "kills": "47-22",
+     "matchId": "8903555311",
+     "vod": "https://youtube.com/live/X5Ym_HDZbtE",
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Radiant",
+     "pick": "1st",
+     "result": "W",
+     "kills": "43-19",
+     "matchId": "8903616342",
+     "vod": null,
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20260720-19",
+   "date": "2026-07-20",
+   "opp": "Rekonix",
+   "phase": "new-roster",
+   "w": 0,
+   "l": 2,
+   "games": [
+    {
+     "side": "Radiant",
+     "pick": "1st",
+     "result": "L",
+     "kills": "24-42",
+     "matchId": "8905079887",
+     "vod": "https://youtube.com/live/WQNMX6aOKgg",
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Dire",
+     "pick": "2nd",
+     "result": "L",
+     "kills": "48-17",
+     "matchId": "8905130290",
+     "vod": "https://youtube.com/live/Z8_2tZc5dvs",
+     "note": "Need more focus overall game",
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20260721-20",
+   "date": "2026-07-21",
+   "opp": "Yakult",
+   "phase": "new-roster",
+   "w": 2,
+   "l": 0,
+   "games": [
+    {
+     "side": "Radiant",
+     "pick": "1st",
+     "result": "W",
+     "kills": "32-39",
+     "matchId": "8906439844",
+     "vod": "https://youtube.com/live/a91qZOe4K6I",
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Dire",
+     "pick": "2nd",
+     "result": "W",
+     "kills": "21-43",
+     "matchId": "8906496278",
+     "vod": "https://youtube.com/live/5cSNs1Gr_xo",
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20260721-21",
+   "date": "2026-07-21",
+   "opp": "Rekonix",
+   "phase": "new-roster",
+   "w": 1,
+   "l": 1,
+   "games": [
+    {
+     "side": "Dire",
+     "pick": "2nd",
+     "result": "L",
+     "kills": "45-23",
+     "matchId": "8906546651",
+     "vod": "https://youtube.com/live/5cSNs1Gr_xo",
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Radiant",
+     "pick": "1st",
+     "result": "W",
+     "kills": "25-9",
+     "matchId": "8906588753",
+     "vod": "https://youtube.com/live/5cSNs1Gr_xo",
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20260722-22",
+   "date": "2026-07-22",
+   "opp": "Yakult",
+   "phase": "new-roster",
+   "w": 0,
+   "l": 1,
+   "games": [
+    {
+     "side": "Radiant",
+     "pick": "1st",
+     "result": "L",
+     "kills": "33-42",
+     "matchId": null,
+     "vod": "https://youtube.com/live/XQJAkdz-itk",
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": null,
+     "pick": null,
+     "result": null,
+     "kills": null,
+     "matchId": null,
+     "vod": null,
+     "note": null,
+     "status": "cancelled"
+    }
+   ]
+  },
+  {
+   "key": "r20260722-23",
+   "date": "2026-07-22",
+   "opp": "GLYPH",
+   "phase": "new-roster",
+   "w": 0,
+   "l": 2,
+   "games": [
+    {
+     "side": "Dire",
+     "pick": "2nd",
+     "result": "L",
+     "kills": "49-26",
+     "matchId": "8908001829",
+     "vod": "https://youtube.com/live/x4Sc92E79_k?feature=share",
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Radiant",
+     "pick": "1st",
+     "result": "L",
+     "kills": "35-39",
+     "matchId": "8908052700",
+     "vod": "https://youtube.com/live/x4Sc92E79_k?feature=share",
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20260724-24",
+   "date": "2026-07-24",
+   "opp": "Aomqu Stack",
+   "phase": "new-roster",
+   "w": 1,
+   "l": 1,
+   "games": [
+    {
+     "side": "Radiant",
+     "pick": "1st",
+     "result": "L",
+     "kills": "38-55",
+     "matchId": "8910862626",
+     "vod": "https://youtube.com/live/I4dPDgvWj8U?feature=share",
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Dire",
+     "pick": "2nd",
+     "result": "W",
+     "kills": "23-37",
+     "matchId": "8910923582",
+     "vod": "https://youtube.com/live/I4dPDgvWj8U?feature=share",
+     "note": "need comms improvement",
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20260724-25",
+   "date": "2026-07-24",
+   "opp": "LGD",
+   "phase": "new-roster",
+   "w": 1,
+   "l": 0,
+   "games": [
+    {
+     "side": "Radiant",
+     "pick": "1st",
+     "result": "W",
+     "kills": "20-16",
+     "matchId": "8911020857",
+     "vod": null,
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Dire",
+     "pick": "2nd",
+     "result": null,
+     "kills": null,
+     "matchId": null,
+     "vod": "https://youtube.com/live/k9OfZ8FHWd0?feature=share",
+     "note": null,
+     "status": "cancelled"
+    }
+   ]
+  },
+  {
+   "key": "r20260725-26",
+   "date": "2026-07-25",
+   "opp": "GLYPH",
+   "phase": "new-roster",
+   "w": 0,
+   "l": 2,
+   "games": [
+    {
+     "side": "Dire",
+     "pick": "2nd",
+     "result": "L",
+     "kills": "41-33",
+     "matchId": "8912446867",
+     "vod": "https://youtube.com/live/MePf5CKYoJM?feature=share",
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Radiant",
+     "pick": "1st",
+     "result": "L",
+     "kills": "25-41",
+     "matchId": "8912506654",
+     "vod": "https://youtube.com/live/MePf5CKYoJM?feature=share",
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20260724-27",
+   "date": "2026-07-24",
+   "opp": "LGD",
+   "phase": "new-roster",
+   "w": 0,
+   "l": 1,
+   "games": [
+    {
+     "side": "Dire",
+     "pick": "2nd",
+     "result": "L",
+     "kills": "43-19",
+     "matchId": "8912833032",
+     "vod": "https://youtube.com/live/EFlBhy9ZM3o?feature=share",
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Radiant",
+     "pick": "1st",
+     "result": null,
+     "kills": null,
+     "matchId": null,
+     "vod": "https://youtube.com/live/EFlBhy9ZM3o?feature=share",
+     "note": null,
+     "status": "not-played"
+    }
+   ]
+  },
+  {
+   "key": "r20260817-28",
+   "date": "2026-08-17",
+   "opp": "Nemesis",
+   "phase": "blast-prep",
+   "w": 0,
+   "l": 1,
+   "games": [
+    {
+     "side": "Dire",
+     "pick": "1st",
+     "result": "L",
+     "kills": null,
+     "matchId": "8950190475",
+     "vod": "https://youtube.com/live/_RR631fR88E?feature=share",
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Radiant",
+     "pick": "2nd",
+     "result": null,
+     "kills": null,
+     "matchId": null,
+     "vod": null,
+     "note": null,
+     "status": "cancelled"
+    }
+   ]
+  },
+  {
+   "key": "r20260824-29",
+   "date": "2026-08-24",
+   "opp": "IAP",
+   "phase": "blast-prep",
+   "w": 2,
+   "l": 0,
+   "games": [
+    {
+     "side": "Dire",
+     "pick": "1st",
+     "result": "W",
+     "kills": "8-39",
+     "matchId": "8962314441",
+     "vod": "https://youtube.com/live/PSWTw1Td0KE?feature=share",
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Radiant",
+     "pick": "2nd",
+     "result": "W",
+     "kills": "29-16",
+     "matchId": "8962368515",
+     "vod": "https://youtube.com/live/PSWTw1Td0KE?feature=share",
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20260824-30",
+   "date": "2026-08-24",
+   "opp": "Execration",
+   "phase": "blast-prep",
+   "w": 2,
+   "l": 0,
+   "games": [
+    {
+     "side": "Dire",
+     "pick": "1st",
+     "result": "W",
+     "kills": "40-12",
+     "matchId": "8962459287",
+     "vod": "https://youtube.com/live/PSWTw1Td0KE?feature=share",
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Radiant",
+     "pick": "2nd",
+     "result": "W",
+     "kills": "30-47",
+     "matchId": "8962527661",
+     "vod": "https://youtube.com/live/PSWTw1Td0KE?feature=share",
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20260825-31",
+   "date": "2026-08-25",
+   "opp": "Ice Cream Man",
+   "phase": "blast-prep",
+   "w": 1,
+   "l": 1,
+   "games": [
+    {
+     "side": "Radiant",
+     "pick": "1st",
+     "result": "W",
+     "kills": "47-43",
+     "matchId": "8964342908",
+     "vod": "https://youtube.com/live/7kojclW7NZ0?feature=share",
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Dire",
+     "pick": "2nd",
+     "result": "L",
+     "kills": "32-23",
+     "matchId": "8964408641",
+     "vod": "https://youtube.com/live/7kojclW7NZ0?feature=share",
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20260825-32",
+   "date": "2026-08-25",
+   "opp": "Cije Stack",
+   "phase": "blast-prep",
+   "w": 1,
+   "l": 1,
+   "games": [
+    {
+     "side": "Radiant",
+     "pick": "2nd",
+     "result": "W",
+     "kills": "38-15",
+     "matchId": "8964475171",
+     "vod": "https://youtube.com/live/7kojclW7NZ0?feature=share",
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Dire",
+     "pick": "1st",
+     "result": "L",
+     "kills": "43-45",
+     "matchId": "8964534940",
+     "vod": "https://youtube.com/live/7kojclW7NZ0?feature=share",
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20260826-33",
+   "date": "2026-08-26",
+   "opp": "Ice Cream Man",
+   "phase": "blast-prep",
+   "w": 1,
+   "l": 1,
+   "games": [
+    {
+     "side": "Radiant",
+     "pick": "2nd",
+     "result": "L",
+     "kills": "15-31",
+     "matchId": "8966337896",
+     "vod": "https://youtube.com/live/44SPUGgc9Cw?feature=share",
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Dire",
+     "pick": "1st",
+     "result": "W",
+     "kills": "30-39",
+     "matchId": "8966393938",
+     "vod": "https://youtube.com/live/44SPUGgc9Cw?feature=share",
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20260827-34",
+   "date": "2026-08-27",
+   "opp": "Nemesis",
+   "phase": "blast-prep",
+   "w": 0,
+   "l": 2,
+   "games": [
+    {
+     "side": "Dire",
+     "pick": "1st",
+     "result": "L",
+     "kills": "42-21",
+     "matchId": "8967984022",
+     "vod": "https://youtube.com/live/_fN_hEFZlwA?feature=share",
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Radiant",
+     "pick": "2nd",
+     "result": "L",
+     "kills": "24-37",
+     "matchId": "8968032598",
+     "vod": "https://youtube.com/live/_fN_hEFZlwA?feature=share",
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20260827-35",
+   "date": "2026-08-27",
+   "opp": "XG Junior",
+   "phase": "blast-prep",
+   "w": 1,
+   "l": 1,
+   "games": [
+    {
+     "side": "Radiant",
+     "pick": "2nd",
+     "result": "W",
+     "kills": "41-51",
+     "matchId": "8968117499",
+     "vod": "https://youtube.com/live/_fN_hEFZlwA?feature=share",
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Dire",
+     "pick": "1st",
+     "result": "L",
+     "kills": "45-43",
+     "matchId": "8968198299",
+     "vod": "https://youtube.com/live/_fN_hEFZlwA?feature=share",
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20260901-36",
+   "date": "2026-09-01",
+   "opp": "IAP",
+   "phase": "blast-prep",
+   "w": 2,
+   "l": 0,
+   "games": [
+    {
+     "side": "Dire",
+     "pick": "1st",
+     "result": "W",
+     "kills": "33-31",
+     "matchId": "8977100433",
+     "vod": "https://youtube.com/live/yFsrBNCzPKw?feature=share",
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Radiant",
+     "pick": "2nd",
+     "result": "W",
+     "kills": "30-10",
+     "matchId": "8977158630",
+     "vod": "https://youtube.com/live/yFsrBNCzPKw?feature=share",
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20260902-37",
+   "date": "2026-09-02",
+   "opp": "XG Junior",
+   "phase": "blast-prep",
+   "w": 1,
+   "l": 0,
+   "games": [
+    {
+     "side": "Radiant",
+     "pick": "2nd",
+     "result": "W",
+     "kills": "27-18",
+     "matchId": "8978661981",
+     "vod": "https://www.youtube.com/live/IWuTE7L5HU8",
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": null,
+     "pick": null,
+     "result": null,
+     "kills": null,
+     "matchId": null,
+     "vod": null,
+     "note": null,
+     "status": "cancelled"
+    }
+   ]
+  },
+  {
+   "key": "r20260902-38",
+   "date": "2026-09-02",
+   "opp": "Execration",
+   "phase": "blast-prep",
+   "w": 1,
+   "l": 1,
+   "games": [
+    {
+     "side": "Dire",
+     "pick": "1st",
+     "result": "W",
+     "kills": "40-12",
+     "matchId": null,
+     "vod": "https://youtube.com/live/gcDtLQ4svIo?feature=share",
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Radiant",
+     "pick": "2nd",
+     "result": "L",
+     "kills": "33-33",
+     "matchId": "8978803098",
+     "vod": "https://youtube.com/live/gcDtLQ4svIo?feature=share",
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20260903-39",
+   "date": "2026-09-03",
+   "opp": "Execration",
+   "phase": "blast-prep",
+   "w": 0,
+   "l": 2,
+   "games": [
+    {
+     "side": "Dire",
+     "pick": "1st",
+     "result": "L",
+     "kills": "34-12",
+     "matchId": "8980246210",
+     "vod": "https://youtube.com/live/IAynaXHOZLM?feature=share",
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Radiant",
+     "pick": "2nd",
+     "result": "L",
+     "kills": "30-10",
+     "matchId": "8980287991",
+     "vod": "https://youtube.com/live/IAynaXHOZLM?feature=share",
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20260907-40",
+   "date": "2026-09-07",
+   "opp": "Tim Bored",
+   "phase": "blast-prep",
+   "w": 1,
+   "l": 1,
+   "games": [
+    {
+     "side": "Radiant",
+     "pick": "2nd",
+     "result": "W",
+     "kills": "33-19",
+     "matchId": "8986968056",
+     "vod": "https://youtube.com/live/JDfiscbPbyw?feature=share",
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Dire",
+     "pick": "1st",
+     "result": "L",
+     "kills": "32-34",
+     "matchId": "8987001722",
+     "vod": "https://youtube.com/live/JDfiscbPbyw?feature=share",
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20260909-41",
+   "date": "2026-09-09",
+   "opp": "Xipto",
+   "phase": "blast-prep",
+   "w": 1,
+   "l": 1,
+   "games": [
+    {
+     "side": "Radiant",
+     "pick": "2nd",
+     "result": "L",
+     "kills": "47-44",
+     "matchId": "8989891211",
+     "vod": "https://youtube.com/live/ja17jF3qv0U?feature=share",
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Dire",
+     "pick": "1st",
+     "result": "W",
+     "kills": "28-12",
+     "matchId": "8989942068",
+     "vod": "https://youtube.com/live/ja17jF3qv0U?feature=share",
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20260909-42",
+   "date": "2026-09-09",
+   "opp": "Nemesis",
+   "phase": "blast-prep",
+   "w": 0,
+   "l": 1,
+   "games": [
+    {
+     "side": "Dire",
+     "pick": "1st",
+     "result": "L",
+     "kills": "16-37",
+     "matchId": "8991401177",
+     "vod": "https://youtube.com/live/h8xW0NI3Q_Y?feature=share",
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Radiant",
+     "pick": "2nd",
+     "result": null,
+     "kills": null,
+     "matchId": null,
+     "vod": null,
+     "note": null,
+     "status": "not-played"
+    }
+   ]
+  },
+  {
+   "key": "r20260925-43",
+   "date": "2026-09-25",
+   "opp": "Xipto",
+   "phase": "blast-prep",
+   "w": 0,
+   "l": 2,
+   "games": [
+    {
+     "side": "Dire",
+     "pick": "1st",
+     "result": "L",
+     "kills": "41-33",
+     "matchId": "9015042620",
+     "vod": "https://youtube.com/live/soy_oBRJfBQ?feature=share",
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Radiant",
+     "pick": "2nd",
+     "result": "L",
+     "kills": "26-41",
+     "matchId": "9015100435",
+     "vod": "https://youtube.com/live/soy_oBRJfBQ?feature=share",
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20260929-44",
+   "date": "2026-09-29",
+   "opp": "Kinetix",
+   "phase": "blast-prep",
+   "w": 2,
+   "l": 0,
+   "games": [
+    {
+     "side": "Radiant",
+     "pick": "1st",
+     "result": "W",
+     "kills": "41-33",
+     "matchId": "9021242709",
+     "vod": "https://youtube.com/live/4E1Bwg043Z0?feature=share",
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Dire",
+     "pick": "2nd",
+     "result": "W",
+     "kills": "26-41",
+     "matchId": "9021275583",
+     "vod": "https://youtube.com/live/4E1Bwg043Z0?feature=share",
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20261002-45",
+   "date": "2026-10-02",
+   "opp": "Team Resilience",
+   "phase": "blast-prep",
+   "w": 0,
+   "l": 2,
+   "games": [
+    {
+     "side": "Radiant",
+     "pick": "2nd",
+     "result": "L",
+     "kills": "35-19",
+     "matchId": "9025538936",
+     "vod": "https://youtube.com/live/ISunAHoj7ac?feature=share",
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Dire",
+     "pick": "1st",
+     "result": "L",
+     "kills": "27-42",
+     "matchId": "9025592616",
+     "vod": "https://youtube.com/live/ISunAHoj7ac?feature=share",
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20261010-46",
+   "date": "2026-10-10",
+   "opp": "Tidebound",
+   "phase": "blast-prep",
+   "w": 1,
+   "l": 1,
+   "games": [
+    {
+     "side": "Dire",
+     "pick": "1st",
+     "result": "L",
+     "kills": "41-13",
+     "matchId": "9037587343",
+     "vod": "https://youtube.com/live/_Xt2Jk-l0DA?feature=share",
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Radiant",
+     "pick": "2nd",
+     "result": "W",
+     "kills": "56-27",
+     "matchId": "9037642252",
+     "vod": "https://youtube.com/live/_Xt2Jk-l0DA?feature=share",
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20261010-47",
+   "date": "2026-10-10",
+   "opp": "Satan666",
+   "phase": "blast-prep",
+   "w": 1,
+   "l": 1,
+   "games": [
+    {
+     "side": "Dire",
+     "pick": "1st",
+     "result": "W",
+     "kills": "30-48",
+     "matchId": "9037707883",
+     "vod": "https://youtube.com/live/_Xt2Jk-l0DA?feature=share",
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Radiant",
+     "pick": "2nd",
+     "result": "L",
+     "kills": "20-39",
+     "matchId": "9037767299",
+     "vod": "https://youtube.com/live/_Xt2Jk-l0DA?feature=share",
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20261011-48",
+   "date": "2026-10-11",
+   "opp": "XCTN",
+   "phase": "blast-prep",
+   "w": 2,
+   "l": 0,
+   "games": [
+    {
+     "side": "Dire",
+     "pick": "1st",
+     "result": "W",
+     "kills": "17-50",
+     "matchId": "9039572950",
+     "vod": "https://youtube.com/live/T8LS7Cx4e9M?feature=share",
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Radiant",
+     "pick": "2nd",
+     "result": "W",
+     "kills": "38-17",
+     "matchId": "9039646400",
+     "vod": "https://youtube.com/live/T8LS7Cx4e9M?feature=share",
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20261013-49",
+   "date": "2026-10-13",
+   "opp": "Tidebound",
+   "phase": "blast-prep",
+   "w": 1,
+   "l": 1,
+   "games": [
+    {
+     "side": "Dire",
+     "pick": "1st",
+     "result": "W",
+     "kills": "42-41",
+     "matchId": "9042687161",
+     "vod": "https://youtube.com/live/ABeX0BkURCc?feature=share",
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Radiant",
+     "pick": "2nd",
+     "result": "L",
+     "kills": "18-30",
+     "matchId": "9042734247",
+     "vod": "https://youtube.com/live/ABeX0BkURCc?feature=share",
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20261013-50",
+   "date": "2026-10-13",
+   "opp": "YG",
+   "phase": "blast-prep",
+   "w": 1,
+   "l": 1,
+   "games": [
+    {
+     "side": "Dire",
+     "pick": "1st",
+     "result": "L",
+     "kills": "44-36",
+     "matchId": "9042786762",
+     "vod": "https://youtube.com/live/ABeX0BkURCc?feature=share",
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Radiant",
+     "pick": "2nd",
+     "result": "W",
+     "kills": "42-12",
+     "matchId": "9042850332",
+     "vod": "https://youtube.com/live/ABeX0BkURCc?feature=share",
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20261013-51",
+   "date": "2026-10-13",
+   "opp": "Novus",
+   "phase": "blast-prep",
+   "w": 2,
+   "l": 0,
+   "games": [
+    {
+     "side": "Radiant",
+     "pick": "2nd",
+     "result": "W",
+     "kills": "43-25",
+     "matchId": "9044219875",
+     "vod": "https://youtube.com/live/Mh5FEfNzaHA?feature=share",
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Dire",
+     "pick": "1st",
+     "result": "W",
+     "kills": "18-41",
+     "matchId": "9044272293",
+     "vod": "https://youtube.com/live/Mh5FEfNzaHA?feature=share",
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20261013-52",
+   "date": "2026-10-13",
+   "opp": "Royal Bear",
+   "phase": "blast-prep",
+   "w": 1,
+   "l": 1,
+   "games": [
+    {
+     "side": "Radiant",
+     "pick": "2nd",
+     "result": "L",
+     "kills": "18-46",
+     "matchId": "9044323037",
+     "vod": "https://youtube.com/live/Mh5FEfNzaHA?feature=share",
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Dire",
+     "pick": "1st",
+     "result": "W",
+     "kills": "22-39",
+     "matchId": "9044376499",
+     "vod": "https://youtube.com/live/Mh5FEfNzaHA?feature=share",
+     "note": null,
+     "status": "played"
+    }
+   ]
+  },
+  {
+   "key": "r20261013-53",
+   "date": "2026-10-13",
+   "opp": "XG",
+   "phase": "blast-prep",
+   "w": 0,
+   "l": 2,
+   "games": [
+    {
+     "side": "Dire",
+     "pick": "1st",
+     "result": "L",
+     "kills": "31-16",
+     "matchId": "9044472272",
+     "vod": "https://youtube.com/live/Mh5FEfNzaHA?feature=share",
+     "note": null,
+     "status": "played"
+    },
+    {
+     "side": "Radiant",
+     "pick": "2nd",
+     "result": "L",
+     "kills": "30-32",
+     "matchId": "9044524897",
+     "vod": "https://youtube.com/live/Mh5FEfNzaHA?feature=share",
+     "note": null,
+     "status": "played"
+    }
+   ]
+  }
+ ]
+}

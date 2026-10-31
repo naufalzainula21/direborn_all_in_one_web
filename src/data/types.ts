@@ -17,8 +17,10 @@ export interface CalendarEvent {
   scoreThem?: number
   /** Dota match IDs for Dotabuff/OpenDota links */
   matchIds?: string[]
-  /** 'official' = tournament match from public data (read-only) */
-  source?: 'official'
+  /** 'official' = tournament match from public data; 'report' = scrim from the team's report sheet (both read-only) */
+  source?: 'official' | 'report'
+  /** Links a report scrim to its games for the scrim report popup */
+  reportKey?: string
   /** Links an official event to its series for the match popup */
   seriesKey?: string
 }

@@ -43,7 +43,7 @@ function ViewIcon({ view }: { view: ScheduleView }) {
 function Chip({ e }: { e: CalendarEvent }) {
   return (
     <span className={`chip chip--${e.type}`}>
-      <strong>{e.time}</strong> {CHIP_LABEL[e.type]}
+      <strong>{e.source === 'report' ? 'Played' : e.time}</strong> {CHIP_LABEL[e.type]}
     </span>
   )
 }
@@ -54,7 +54,7 @@ function ChipButton({ e }: { e: CalendarEvent }) {
   return (
     <button type="button" className={`chip chip--${e.type} chip--btn`} onClick={() => openEvent(e)}
       aria-label={`${e.time} ${e.title}${e.opponent ? ` vs ${e.opponent}` : ''}. Details`}>
-      <strong>{e.time}</strong> {e.opponent && e.type !== 'practice' ? `vs ${e.opponent}` : CHIP_LABEL[e.type]}
+      <strong>{e.source === 'report' ? `${e.scoreUs}–${e.scoreThem}` : e.time}</strong> {e.opponent && e.type !== 'practice' ? `vs ${e.opponent}` : CHIP_LABEL[e.type]}
     </button>
   )
 }
@@ -197,7 +197,7 @@ function DayView({ date, events }: { date: string; events: CalendarEvent[] }) {
     <ul className="day-list">
       {events.map((e) => (
         <li key={e.id} className="day-list__item">
-          <span className="day-list__time">{e.time}</span>
+          <span className="day-list__time">{e.source === 'report' ? 'Played' : e.time}</span>
           <span className={`dot dot--lg dot--${e.type}`} />
           <button type="button" className="day-list__text day-list__open" onClick={() => openEvent(e)}>
             <span className="day-list__title">{e.opponent && e.type === 'tournament' ? `${e.title} · vs ${e.opponent}` : e.title}</span>
@@ -206,7 +206,7 @@ function DayView({ date, events }: { date: string; events: CalendarEvent[] }) {
           </button>
           <span className={`badge badge--type-${e.type}`}>{TYPE_LABEL[e.type]}</span>
           <button type="button" className="ghost-btn day-list__summary" onClick={() => openEvent(e)}>Details</button>
-          {source === 'db' && e.source !== 'official' && (
+          {source === 'db' && !e.source && (
             <button type="button" className="icon-btn icon-btn--sm" aria-label={`Delete ${e.title}`} disabled={busy === e.id} onClick={() => onDelete(e)}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" /></svg>
             </button>
