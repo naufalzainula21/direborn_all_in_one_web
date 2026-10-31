@@ -14,8 +14,8 @@ export function Schedule({ now }: { now: Date }) {
         <span className="muted">{longToday(now)}</span>
         <h1 className="page-title">Schedule</h1>
       </div>
-      {source === 'sample' && (
-        <p className="notice">Showing sample data. The shared database isn't connected yet, so new events can't be saved.</p>
+      {source === 'offline' && (
+        <p className="notice">The shared database isn't reachable right now. Official matches still show; team events will load when it's back.</p>
       )}
 
       <div className="home-grid">

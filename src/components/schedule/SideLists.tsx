@@ -1,4 +1,5 @@
 import type { CalendarEvent } from '../../data/types'
+import { useEvents } from '../../data/events'
 import { countdown, matchTime, parseDay } from '../../lib/format'
 import { formatOf, stageOf, startISO, type TournamentSummary } from '../../lib/schedule'
 import { Icon } from '../Icon'
@@ -67,6 +68,7 @@ export function NextTournamentCard({ t, now }: { t?: TournamentSummary; now: Dat
 }
 
 export function TournamentSchedule({ events, today }: { events: CalendarEvent[]; today: string }) {
+  const { openMatch } = useEvents()
   const list = events.filter((e) => e.type === 'tournament' && e.date >= today).slice(0, 5)
   return (
     <section className="card" aria-labelledby="ts-title">
@@ -76,13 +78,16 @@ export function TournamentSchedule({ events, today }: { events: CalendarEvent[];
       ) : (
         <ul className="side-list">
           {list.map((e) => (
-            <li key={e.id} className="side-list__item">
-              <DateBox iso={e.date} today={today} />
-              <span className="side-list__text">
-                <span className="side-list__title side-list__title--display">{e.title}</span>
-                <span className="muted small">{e.detail}</span>
-              </span>
-              <span className="side-list__time">{e.time}</span>
+            <li key={e.id}>
+              <button type="button" className="side-list__item side-list__item--btn" disabled={!e.seriesKey}
+                onClick={() => e.seriesKey && openMatch(e.seriesKey)}>
+                <DateBox iso={e.date} today={today} />
+                <span className="side-list__text">
+                  <span className="side-list__title side-list__title--display">{e.title}</span>
+                  <span className="muted small">{e.detail}</span>
+                </span>
+                <span className="side-list__time">{e.time}</span>
+              </button>
             </li>
           ))}
         </ul>

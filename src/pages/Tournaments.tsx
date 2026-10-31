@@ -1,21 +1,15 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
+import { useEvents } from '../data/events'
 import { TournamentDialog } from '../components/tournaments/TournamentDialog'
 import {
   bestFinish, calendar, nextMatch, pastTournaments, podiums, running, runningSeries, seriesFor, upcoming,
-  type Game, type TournamentInfo,
+  type TournamentInfo,
 } from '../data/tournaments'
 
 export function Tournaments() {
-  const [games, setGames] = useState<Game[]>([])
-  const [loadError, setLoadError] = useState(false)
+  const { games, series, openMatch } = useEvents()
   const [open, setOpen] = useState<TournamentInfo | null>(null)
-
-  useEffect(() => {
-    fetch('/data/direborn-games.json')
-      .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
-      .then(setGames)
-      .catch(() => setLoadError(true))
-  }, [])
+  const s19 = series.filter((s) => s.tourKey === 'EPL S19')
 
   const cards = useMemo(
     () => pastTournaments.map((t) => {
@@ -75,14 +69,19 @@ export function Tournaments() {
               <div className="running__panel">
                 <span className="running__panel-title">Direborn matches</span>
                 <ul className="run-matches">
-                  {running.matches.map((m) => (
-                    <li key={m.opp} className="run-matches__row">
-                      <span className="muted small run-matches__date">{m.date}</span>
-                      <span className="run-matches__opp">{m.opp}</span>
-                      <span className="score">{m.score}</span>
-                      <span className={`badge badge--${m.res === 'W' ? 'win' : m.res === 'L' ? 'loss' : 'next'}`}>{m.res}</span>
-                    </li>
-                  ))}
+                  {running.matches.map((m) => {
+                    const key = s19.find((s) => s.opp === m.opp)?.key
+                    return (
+                      <li key={m.opp}>
+                        <button type="button" className="run-matches__row" onClick={() => key && openMatch(key)}>
+                          <span className="muted small run-matches__date">{m.date}</span>
+                          <span className="run-matches__opp">{m.opp}</span>
+                          <span className="score">{m.score}</span>
+                          <span className={`badge badge--${m.res === 'W' ? 'win' : m.res === 'L' ? 'loss' : 'next'}`}>{m.res}</span>
+                        </button>
+                      </li>
+                    )
+                  })}
                 </ul>
                 <span className="muted small">Game scoreboards appear once OpenDota records this league.</span>
               </div>
@@ -94,7 +93,6 @@ export function Tournaments() {
               <h2 id="past-title" className="card__title">Past results</h2>
               <span className="muted small">Open a tournament for highlights and match summaries</span>
             </div>
-            {loadError && <p className="field__error">Couldn't load match data. Results still show placements.</p>}
             <div className="tour-cards">
               {cards.map(({ t, sub }) => (
                 <button key={t.key} type="button" className="tour-card" onClick={() => setOpen(t)}>

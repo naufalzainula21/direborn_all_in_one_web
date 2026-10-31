@@ -156,7 +156,7 @@ export function ScheduleBrowser({ events, today }: { events: CalendarEvent[]; to
 }
 
 function DayView({ date, events }: { date: string; events: CalendarEvent[] }) {
-  const { openAdd, remove, source } = useEvents()
+  const { openAdd, remove, source, openMatch } = useEvents()
   const [busy, setBusy] = useState<string | null>(null)
   const [error, setError] = useState('')
 
@@ -194,7 +194,10 @@ function DayView({ date, events }: { date: string; events: CalendarEvent[] }) {
             {e.notes && <span className="day-list__notes">{e.notes}</span>}
           </span>
           <span className={`badge badge--type-${e.type}`}>{TYPE_LABEL[e.type]}</span>
-          {source === 'db' && (
+          {e.source === 'official' && e.seriesKey && (
+            <button type="button" className="ghost-btn day-list__summary" onClick={() => openMatch(e.seriesKey!)}>Summary</button>
+          )}
+          {source === 'db' && e.source !== 'official' && (
             <button type="button" className="icon-btn icon-btn--sm" aria-label={`Delete ${e.title}`} disabled={busy === e.id} onClick={() => onDelete(e)}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" /></svg>
             </button>

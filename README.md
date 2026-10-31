@@ -68,7 +68,9 @@ src/
   pages/Schedule.tsx       Schedule page (/schedule)
   pages/Tournaments.tsx    Tournaments page (/tournaments): running event, past results, popup with highlights and scoreboards
   data/tournaments.ts      Tournament list, EPL S19 standings, upcoming, helpers
-  components/tournaments/  Tournament popup and match scoreboard
+  data/official.ts         Official matches as series + schedule events (shown on every page)
+  components/tournaments/  Tournament popup, match popup and scoreboard
+  components/home/RecentMatches.tsx  Recent matches, newest first, 5 per page (swipe or arrows)
 worker/
   index.ts                 API Worker (D1) + static assets
 public/

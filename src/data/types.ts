@@ -12,6 +12,10 @@ export interface CalendarEvent {
   opponent?: string
   status?: BookingStatus // scrims only
   notes?: string
+  /** 'official' = tournament match from public data (read-only) */
+  source?: 'official'
+  /** Links an official event to its series for the match popup */
+  seriesKey?: string
 }
 
 export type ScrimOutcome = 'win' | 'loss' | 'draw'

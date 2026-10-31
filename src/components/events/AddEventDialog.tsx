@@ -141,7 +141,7 @@ export function AddEventDialog() {
   const id = (name: string) => `${uid}-${name}`
   const err = (name: keyof Errors) =>
     errors[name] ? <span className="field__error" id={id(`${name}-err`)}>{errors[name]}</span> : null
-  const readOnly = source === 'sample'
+  const readOnly = source === 'offline'
 
   return (
     <dialog ref={ref} className="sheet" aria-labelledby={id('title')} onClose={closeAdd} onCancel={closeAdd}>
