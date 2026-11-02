@@ -13,5 +13,7 @@ export const navItems: NavItem[] = [
   { id: 'schedule', label: 'Schedule', icon: 'calendar', path: '/schedule' },
   { id: 'scrims', label: 'Scrims', icon: 'target', path: '/scrims' },
   { id: 'tournaments', label: 'Tournaments', icon: 'trophy', path: '/tournaments' },
-  { id: 'roster', label: 'Roster', icon: 'users' },
+  { id: 'planner', label: 'Content', icon: 'sparkle', path: '/planner' },
+  { id: 'goals', label: 'Goals', icon: 'flag', path: '/goals' },
+  { id: 'people', label: 'People', icon: 'users', path: '/people' },
 ]

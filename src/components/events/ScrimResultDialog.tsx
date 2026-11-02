@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
-import { ApiError, saveTeamKey } from '../../data/api'
 import { useEvents } from '../../data/events'
 import { parseDay } from '../../lib/format'
 import { bestOf, opponentOf } from '../../lib/scrims'
@@ -27,8 +26,6 @@ export function ScrimResultDialog() {
   const [notes, setNotes] = useState('')
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
-  const [needKey, setNeedKey] = useState(false)
-  const [teamKey, setTeamKey] = useState('')
 
   useEffect(() => {
     const el = ref.current
@@ -51,17 +48,12 @@ export function ScrimResultDialog() {
     if (us === 0 && them === 0) { setError('Enter the score first. At least one game must be played.'); return }
     const list = ids.split(/[\s,]+/).map((x) => x.replace(/\D/g, '')).filter(Boolean)
     if (list.some((x) => x.length < 6 || x.length > 12)) { setError('Match IDs are 6–12 digit numbers, for example 8971364249.'); return }
-    if (needKey && teamKey.trim()) saveTeamKey(teamKey.trim())
     setSaving(true); setError('')
     try {
       await update(e.id, { scoreUs: us, scoreThem: them, matchIds: list, notes: notes.trim() || null, status: 'played' })
-      setNeedKey(false)
       closeResult()
     } catch (err) {
-      if (err instanceof ApiError && err.status === 401) {
-        setNeedKey(true)
-        setError(needKey ? 'That team code is wrong. Try again.' : 'Enter the team code to save.')
-      } else setError(err instanceof Error ? err.message : 'Could not save. Try again.')
+      setError(err instanceof Error ? err.message : 'Could not save. Try again.')
     } finally { setSaving(false) }
   }
 
@@ -105,12 +97,6 @@ export function ScrimResultDialog() {
               <label className="field__label" htmlFor="res-notes">Notes <span className="field__opt">optional</span></label>
               <textarea id="res-notes" rows={3} maxLength={500} value={notes} onChange={(x) => setNotes(x.target.value)} placeholder="What worked, what to review, who stood in" />
             </div>
-            {needKey && (
-              <div className="field">
-                <label className="field__label" htmlFor="res-key">Team code</label>
-                <input id="res-key" type="password" autoComplete="off" value={teamKey} onChange={(x) => setTeamKey(x.target.value)} placeholder="Ask your manager" />
-              </div>
-            )}
             {error && <p className="field__error" role="alert">{error}</p>}
           </div>
           <footer className="sheet__foot">

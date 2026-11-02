@@ -23,6 +23,11 @@ export interface CalendarEvent {
   reportKey?: string
   /** Links an official event to its series for the match popup */
   seriesKey?: string
+  /** Who added it (user id and name) */
+  createdBy?: string
+  addedBy?: string
+  /** Liquipedia page this match was imported from; kept up to date automatically */
+  importedFrom?: string
 }
 
 export type ScrimOutcome = 'win' | 'loss' | 'draw'

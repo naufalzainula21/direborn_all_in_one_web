@@ -3,6 +3,7 @@ import { useEvents } from '../data/events'
 import { TournamentDialog } from '../components/tournaments/TournamentDialog'
 import { NextMatchCard } from '../components/tournaments/NextMatchCard'
 import { TournamentTabs } from '../components/tournaments/TournamentTabs'
+import { CurrentTournamentCard, pickCurrent } from '../components/tournaments/CurrentTournament'
 import { Link } from 'react-router-dom'
 import { parseDay, todayISO } from '../lib/format'
 import { startISO } from '../lib/schedule'
@@ -12,7 +13,8 @@ import {
 } from '../data/tournaments'
 
 export function Tournaments({ now }: { now: Date }) {
-  const { games, series, openMatch, events } = useEvents()
+  const { games, series, openMatch, events, tournaments } = useEvents()
+  const live = pickCurrent(tournaments, now)
   const [open, setOpen] = useState<TournamentInfo | null>(null)
   const s19 = series.filter((s) => s.tourKey === 'EPL S19')
 
@@ -59,6 +61,7 @@ export function Tournaments({ now }: { now: Date }) {
 
       <div className="home-grid">
         <div className="stack">
+          {live ? <CurrentTournamentCard now={now} /> : (
           <section className="running" aria-labelledby="run-title">
             <div className="running__head">
               <div className="running__heading">
@@ -108,6 +111,7 @@ export function Tournaments({ now }: { now: Date }) {
               </div>
             </div>
           </section>
+          )}
 
           <section className="card" aria-labelledby="past-title">
             <div className="card__head">

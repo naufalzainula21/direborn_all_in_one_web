@@ -3,8 +3,9 @@ import { Link, NavLink } from 'react-router-dom'
 import { useEvents } from '../../data/events'
 import { Icon } from '../Icon'
 import { navItems, type NavItem } from './nav'
-import { RoleSwitcher } from './RoleSwitcher'
+import { UserMenu } from './UserMenu'
 import { roleInfo, useRole } from '../../lib/role'
+import { canAddAny } from '../../lib/permissions'
 
 function NavItemLink({ item, className, iconSize }: { item: NavItem; className: string; iconSize: number }) {
   const content = (
@@ -30,8 +31,8 @@ function NavItemLink({ item, className, iconSize }: { item: NavItem; className: 
 export function AppShell({ children }: { children: ReactNode }) {
   const { openAdd } = useEvents()
   const { role } = useRole()
-  const info = roleInfo(role ?? 'staff')
-  const items = navItems.filter((i) => info.nav.includes(i.id))
+  const info = roleInfo(role)
+  const items = info.nav.map((id) => navItems.find((i) => i.id === id)!).filter(Boolean)
   return (
     <div className={`app app--${info.id}`}>
       <header className="topbar">
@@ -50,13 +51,13 @@ export function AppShell({ children }: { children: ReactNode }) {
           </div>
 
           <div className="topbar__actions">
-            {info.canAdd && (
-              <button type="button" className="btn btn--primary" onClick={() => openAdd()} aria-label="Add event">
+            {canAddAny(role) && (
+              <button type="button" className="btn btn--primary" onClick={() => openAdd()} aria-label={role === 'creative' ? 'Add activity' : 'Add schedule'}>
                 <Icon name="plus" size={16} strokeWidth={2.4} />
-                <span className="btn__label">Add event</span>
+                <span className="btn__label">{role === 'creative' ? 'Add activity' : 'Add schedule'}</span>
               </button>
             )}
-            <RoleSwitcher />
+            <UserMenu />
           </div>
         </div>
       </header>

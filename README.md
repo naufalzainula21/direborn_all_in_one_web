@@ -13,7 +13,7 @@ npm run dev:api  # Worker + local D1 database on http://localhost:8787
 npm run build    # production build into dist/
 ```
 
-Run `npm run build` once before `npm run dev:api`; the Worker serves `dist/` too. Without the API running, the app falls back to sample data.
+Run `npm run build` once before `npm run dev:api`; the Worker serves `dist/` too. The app needs the API running to log in. A fresh local database starts with `admin` / `123`.
 
 ## Deploy to Cloudflare (Workers static assets)
 
@@ -30,9 +30,40 @@ The Worker is set up in the Cloudflare dashboard (Workers & Pages → connected 
 
 Every push to `main` redeploys automatically.
 
-### Team code (recommended)
+### Cron
 
-By default anyone with the link can add or delete events. To require a code: Cloudflare dashboard → the Worker → **Settings → Variables and Secrets → Add** → type **Secret**, name `TEAM_KEY`, value of your choice. The app asks for the code the first time someone saves an event and remembers it on that device.
+`wrangler.jsonc` runs the Worker every 3 hours to refresh imported Liquipedia tournaments that are running or about to start (times, scores, standings, new playoff matches). Max 4 tournaments per run.
+
+## Logins and roles
+
+Everyone has their own account. The first time the database starts, it creates **`admin` / `123`**. Log in with it straight after the first deploy and pick a new password, then add everyone on the **People** page.
+
+- New accounts start with password `123`. The app won't open until the person picks their own (6+ characters, not `123`, not their username).
+- The manager can reset a password back to `123`, change roles, and turn accounts off (history is kept).
+- 5 wrong passwords lock the account for 10 minutes.
+- Passwords are stored as PBKDF2-SHA256 hashes. Sessions are HttpOnly cookies (30 days).
+
+| Role | Home | Can |
+|---|---|---|
+| Manager (Admin) | Full dashboard + current tournament | Everything, plus the People page |
+| Coach | Same as manager | Everything except People |
+| Management | Easy summary | Add schedule (all types), edit/delete own entries, import tournaments |
+| Owner | Easy summary | View only |
+| Creative team | Easy summary + Content planner | Add activities only, edit/delete own activities |
+| Player | Your schedule | View; own personal goals |
+
+Scrim results: manager and coach only. Team targets: manager and coach edit, everyone sees. Personal goals: only the player, the manager and the coach see them; manager and coach can comment.
+
+The rules live in `src/lib/permissions.ts` and are used by both the API (enforced) and the app (buttons).
+
+## Tournament import (Liquipedia)
+
+**Add schedule → Tournament → Find on Liquipedia.** Type a name (`EPL season 19`) or paste a Liquipedia link, pick the tournament, tick Direborn's matches, add. Times are converted to WIB.
+
+- Only Direborn's matches are added (`worker/liquipedia.ts` lists the names Direborn appears under).
+- Imported matches stay linked: the cron updates times and scores and adds new Direborn matches (e.g. playoffs). Deleting an imported match stops it from coming back.
+- Group standings (worked out from finished matches using the page's points rule) and the playoff bracket are shown in the current tournament card and its popup.
+- Uses Liquipedia's public MediaWiki API (`action=query`, not `action=parse`), a descriptive User-Agent, and at most one request every 2 s. Set `LP_CONTACT` (Worker variable) to a contact URL or email for the User-Agent. If Liquipedia rate-limits, the app shows a message; try again later.
 
 ## API
 
@@ -43,19 +74,7 @@ By default anyone with the link can add or delete events. To require a code: Clo
 | PATCH | `/api/events/:id` | Any of `{ status, scoreUs, scoreThem, matchIds, notes }`; `null` clears. Used for scrim results |
 | DELETE | `/api/events/:id` | |
 
-POST, PATCH and DELETE need `X-Team-Key` when `TEAM_KEY` is set.
-
-## Views by role
-
-The first screen asks who is using the app; switch any time from the top-right menu. The choice is saved on the device.
-
-| Role | Home page | Menu |
-|---|---|---|
-| Player | Up next, today, next 7 days, latest results. No editing | Home, Schedule |
-| Coach & management | Full dashboard | Home, Schedule, Scrims, Tournaments |
-| Creative team | Content queue (posters, match-day, result posts, activities), tournament + activity calendar | Home, Schedule, Tournaments |
-
-Roles change what each screen shows, not who can save: saving still needs the team code.
+Every endpoint needs a login (session cookie). Also: `/api/auth/{login,logout,me,password}`, `/api/users` (manager), `/api/goals`, `/api/goals/:id/comments`, `/api/tournaments`, `/api/lp/{search,preview,import,refresh}`.
 
 ## Add to the iPhone home screen
 

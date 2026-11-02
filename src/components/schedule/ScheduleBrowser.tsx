@@ -3,6 +3,8 @@ import type { CalendarEvent } from '../../data/types'
 import { useEvents } from '../../data/events'
 import { addDays, mondayOf, parseDay, toISODate } from '../../lib/format'
 import { Icon } from '../Icon'
+import { canEditEvent } from '../../lib/permissions'
+import { useRole } from '../../lib/role'
 import { CHIP_LABEL, DOW, TYPE_LABEL, type ScheduleFilter, type ScheduleView } from './meta'
 
 const VIEW_KEY = 'direborn.schedule.view'
@@ -168,6 +170,7 @@ export function ScheduleBrowser({ events, today }: { events: CalendarEvent[]; to
 
 function DayView({ date, events }: { date: string; events: CalendarEvent[] }) {
   const { openAdd, remove, source, openEvent } = useEvents()
+  const { user } = useRole()
   const [busy, setBusy] = useState<string | null>(null)
   const [error, setError] = useState('')
 
@@ -206,8 +209,8 @@ function DayView({ date, events }: { date: string; events: CalendarEvent[] }) {
           </button>
           <span className={`badge badge--type-${e.type}`}>{TYPE_LABEL[e.type]}</span>
           <button type="button" className="ghost-btn day-list__summary" onClick={() => openEvent(e)}>Details</button>
-          {source === 'db' && !e.source && (
-            <span className="staff-only">
+          {source === 'db' && !e.source && canEditEvent(user, e) && (
+            <span>
             <button type="button" className="icon-btn icon-btn--sm" aria-label={`Delete ${e.title}`} disabled={busy === e.id} onClick={() => onDelete(e)}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" /></svg>
             </button>

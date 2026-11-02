@@ -1,6 +1,9 @@
-import { useEffect, useId, useRef, useState, type FormEvent } from 'react'
-import { ApiError, saveTeamKey, type NewEvent } from '../../data/api'
+import { useEffect, useId, useMemo, useRef, useState, type FormEvent } from 'react'
+import type { NewEvent } from '../../data/api'
 import { useEvents } from '../../data/events'
+import { addableTypes, canImport } from '../../lib/permissions'
+import { useRole } from '../../lib/role'
+import { TournamentImport } from './TournamentImport'
 import type { BookingStatus, EventType } from '../../data/types'
 import { todayISO } from '../../lib/format'
 
@@ -8,7 +11,7 @@ const TYPES: { id: EventType; label: string; hint: string }[] = [
   { id: 'tournament', label: 'Tournament', hint: 'Official match' },
   { id: 'scrim', label: 'Scrim', hint: 'Practice match vs a team' },
   { id: 'practice', label: 'Practice', hint: 'Team training' },
-  { id: 'other', label: 'Other', hint: 'Custom session' },
+  { id: 'other', label: 'Other', hint: 'Activity, meeting, shoot' },
 ]
 
 const FORMATS = ['Bo1', 'Bo2', 'Bo3', 'Bo5']
@@ -86,28 +89,36 @@ function toEvent(f: FormState): NewEvent {
 }
 
 export function AddEventDialog() {
-  const { addDialog, closeAdd, add, source } = useEvents()
+  const { addDialog, closeAdd, add, source, events } = useEvents()
+  const { role } = useRole()
+  const allowed = addableTypes(role)
+  const onlyActivity = allowed.length === 1 && allowed[0] === 'other'
+  const [mode, setMode] = useState<'search' | 'manual'>('search')
+  const [done, setDone] = useState('')
+  // Opponents the team has played before, for the scrim suggestions.
+  const opponents = useMemo(() => [...new Set(events.filter((e) => e.type === 'scrim' && e.opponent).map((e) => e.opponent!.trim()))].sort((a, b) => a.localeCompare(b)), [events])
   const ref = useRef<HTMLDialogElement>(null)
   const uid = useId()
   const [form, setForm] = useState<FormState>(() => initial(todayISO(new Date())))
   const [errors, setErrors] = useState<Errors>({})
   const [saving, setSaving] = useState(false)
   const [serverError, setServerError] = useState('')
-  const [needKey, setNeedKey] = useState(false)
-  const [teamKey, setTeamKey] = useState('')
 
   useEffect(() => {
     const el = ref.current
     if (!el) return
     if (addDialog.open && !el.open) {
-      setForm({ ...initial(addDialog.date ?? todayISO(new Date())), ...(addDialog.type ? { type: addDialog.type } : {}) })
+      const wanted = addDialog.type && allowed.includes(addDialog.type) ? addDialog.type : allowed.includes('scrim') ? 'scrim' : allowed[0]
+      setForm({ ...initial(addDialog.date ?? todayISO(new Date())), type: wanted })
+      setMode(canImport(role) ? 'search' : 'manual')
+      setDone('')
       setErrors({})
       setServerError('')
       el.showModal()
     } else if (!addDialog.open && el.open) {
       el.close()
     }
-  }, [addDialog])
+  }, [addDialog]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const set = <K extends keyof FormState>(key: K, value: FormState[K]) => {
     setForm((f) => ({ ...f, [key]: value }))
@@ -119,20 +130,13 @@ export function AddEventDialog() {
     const errs = validate(form)
     setErrors(errs)
     if (Object.values(errs).some(Boolean)) return
-    if (needKey && teamKey.trim()) saveTeamKey(teamKey.trim())
     setSaving(true)
     setServerError('')
     try {
       await add(toEvent(form))
-      setNeedKey(false)
       closeAdd()
     } catch (err) {
-      if (err instanceof ApiError && err.status === 401) {
-        setNeedKey(true)
-        setServerError(needKey ? 'That team code is wrong. Try again.' : 'Enter the team code to save events.')
-      } else {
-        setServerError(err instanceof Error ? err.message : 'Could not save. Try again.')
-      }
+      setServerError(err instanceof Error ? err.message : 'Could not save. Try again.')
     } finally {
       setSaving(false)
     }
@@ -142,12 +146,13 @@ export function AddEventDialog() {
   const err = (name: keyof Errors) =>
     errors[name] ? <span className="field__error" id={id(`${name}-err`)}>{errors[name]}</span> : null
   const readOnly = source === 'offline'
+  const searching = form.type === 'tournament' && mode === 'search' && canImport(role)
 
   return (
     <dialog ref={ref} className="sheet" aria-labelledby={id('title')} onClose={closeAdd} onCancel={closeAdd}>
       <form className="sheet__form" onSubmit={submit} noValidate>
         <header className="sheet__head">
-          <h2 id={id('title')} className="sheet__title">Add event</h2>
+          <h2 id={id('title')} className="sheet__title">{onlyActivity ? 'Add activity' : 'Add schedule'}</h2>
           <button type="button" className="icon-btn" aria-label="Close" onClick={closeAdd}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
           </button>
@@ -158,10 +163,12 @@ export function AddEventDialog() {
             <p className="notice">The shared database isn't connected yet, so events can't be saved. You can still try the form.</p>
           )}
 
-          <fieldset className="type-picker">
-            <legend className="field__label">Event type</legend>
+          {done && <p className="notice" role="status">{done}</p>}
+          {onlyActivity && <p className="muted small">Photo shoots, streams, meet-ups, sponsor events. Matches and scrims are added by the manager, coach or management.</p>}
+          {!onlyActivity && <fieldset className="type-picker">
+            <legend className="field__label">Type</legend>
             <div className="type-picker__grid">
-              {TYPES.map((t) => (
+              {TYPES.filter((t) => allowed.includes(t.id)).map((t) => (
                 <label key={t.id} className={`type-option type-option--${t.id}${form.type === t.id ? ' is-active' : ''}`}>
                   <input
                     type="radio"
@@ -176,9 +183,18 @@ export function AddEventDialog() {
                 </label>
               ))}
             </div>
-          </fieldset>
+          </fieldset>}
 
-          {form.type === 'tournament' && (
+          {form.type === 'tournament' && canImport(role) && (
+            <div className="segmented" role="radiogroup" aria-label="How to add">
+              <button type="button" role="radio" aria-checked={mode === 'search'} className={`segmented__btn${mode === 'search' ? ' is-active' : ''}`} onClick={() => setMode('search')}>Find on Liquipedia</button>
+              <button type="button" role="radio" aria-checked={mode === 'manual'} className={`segmented__btn${mode === 'manual' ? ' is-active' : ''}`} onClick={() => setMode('manual')}>Type it in</button>
+            </div>
+          )}
+
+          {searching && <TournamentImport onDone={(m) => setDone(m)} />}
+
+          {form.type === 'tournament' && !searching && (
             <>
               <div className="field">
                 <label className="field__label" htmlFor={id('tournament')}>Tournament name</label>
@@ -203,13 +219,15 @@ export function AddEventDialog() {
           {form.type === 'scrim' && (
             <div className="field">
               <label className="field__label" htmlFor={id('opp')}>Opponent team</label>
-              <input id={id('opp')} value={form.opponent} onChange={(e) => set('opponent', e.target.value)} placeholder="Team name" maxLength={60}
+              <input id={id('opp')} list={id('opp-list')} autoComplete="off" value={form.opponent} onChange={(e) => set('opponent', e.target.value)} placeholder="Team name" maxLength={60}
                 aria-invalid={!!errors.opponent} aria-describedby={errors.opponent ? id('opponent-err') : undefined} />
+              <datalist id={id('opp-list')}>{opponents.map((o) => <option key={o} value={o} />)}</datalist>
+              {opponents.length > 0 && <span className="field__help">Start typing to pick a team you’ve played before.</span>}
               {err('opponent')}
             </div>
           )}
 
-          {(form.type === 'tournament' || form.type === 'scrim') && (
+          {((form.type === 'tournament' && !searching) || form.type === 'scrim') && (
             <div className="field-row">
               <div className="field">
                 <span className="field__label" id={id('format-label')}>Format</span>
@@ -255,7 +273,7 @@ export function AddEventDialog() {
 
           {form.type === 'other' && (
             <div className="field">
-              <label className="field__label" htmlFor={id('session')}>Session name</label>
+              <label className="field__label" htmlFor={id('session')}>{onlyActivity ? 'Activity' : 'Session name'}</label>
               <input id={id('session')} value={form.sessionName} onChange={(e) => set('sessionName', e.target.value)}
                 placeholder="Team meeting, photo shoot, bootcamp travel" maxLength={80}
                 aria-invalid={!!errors.sessionName} aria-describedby={errors.sessionName ? id('sessionName-err') : undefined} />
@@ -263,6 +281,7 @@ export function AddEventDialog() {
             </div>
           )}
 
+          {!searching && <>
           <div className="field-row">
             <div className="field">
               <label className="field__label" htmlFor={id('date')}>Date</label>
@@ -302,22 +321,18 @@ export function AddEventDialog() {
               placeholder="Lobby name, server, who's standing in" maxLength={500} />
           </div>
 
-          {needKey && (
-            <div className="field">
-              <label className="field__label" htmlFor={id('key')}>Team code</label>
-              <input id={id('key')} type="password" autoComplete="off" value={teamKey} onChange={(e) => setTeamKey(e.target.value)} placeholder="Ask your manager" />
-              <span className="field__help">Saved on this device after the first time.</span>
-            </div>
-          )}
+          </>}
 
           {serverError && <p className="field__error" role="alert">{serverError}</p>}
         </div>
 
         <footer className="sheet__foot">
-          <button type="button" className="ghost-btn" onClick={closeAdd}>Cancel</button>
-          <button type="submit" className="btn btn--primary" disabled={saving || readOnly}>
-            {saving ? 'Saving…' : 'Save event'}
-          </button>
+          <button type="button" className="ghost-btn" onClick={closeAdd}>{done ? 'Close' : 'Cancel'}</button>
+          {!searching && (
+            <button type="submit" className="btn btn--primary" disabled={saving || readOnly}>
+              {saving ? 'Saving…' : 'Save'}
+            </button>
+          )}
         </footer>
       </form>
     </dialog>

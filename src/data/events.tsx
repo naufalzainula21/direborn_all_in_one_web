@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
-import { createEvent, deleteEvent, fetchEvents, updateEvent, type EventPatch, type NewEvent } from './api'
+import { createEvent, deleteEvent, fetchEvents, fetchTournaments, updateEvent, type EventPatch, type NewEvent, type TournamentData } from './api'
+import { useAuth } from '../lib/role'
 import { buildOfficialSeries, officialEvents, type OfficialSeries } from './official'
 import { reportEvents } from './scrimReport'
 import type { Game } from './tournaments'
@@ -21,6 +22,10 @@ interface EventsState {
   games: Game[]
   /** Official series, newest first. */
   series: OfficialSeries[]
+  /** Tournaments imported from Liquipedia (standings, bracket, Direborn's matches). */
+  tournaments: TournamentData[]
+  /** Reload events and imported tournaments (after an import). */
+  reload: () => void
   add: (e: NewEvent) => Promise<CalendarEvent>
   remove: (id: string) => Promise<void>
   update: (id: string, patch: EventPatch) => Promise<CalendarEvent>
@@ -58,12 +63,27 @@ export function EventsProvider({ children }: { children: ReactNode }) {
   const [matchKey, setMatchKey] = useState<string | null>(null)
   const [eventDetail, setEventDetail] = useState<CalendarEvent | null>(null)
   const [reportKey, setReportKey] = useState<string | null>(null)
+  const [tournaments, setTournaments] = useState<TournamentData[]>([])
+  const [version, setVersion] = useState(0)
+  const { user } = useAuth()
+  const userId = user && !user.mustChange ? user.id : null
 
+  // Team schedule and imported tournaments need a login; reload when the person changes.
   useEffect(() => {
+    if (!userId) { setTeamEvents([]); setTournaments([]); return }
     let cancelled = false
     fetchEvents()
       .then(({ events }) => { if (!cancelled) { setTeamEvents(events); setSource('db') } })
       .catch(() => { if (!cancelled) setSource('offline') })
+    fetchTournaments()
+      .then(({ tournaments: t }) => { if (!cancelled) setTournaments(t) })
+      .catch(() => { /* standings unavailable */ })
+    return () => { cancelled = true }
+  }, [userId, version])
+  const reload = useCallback(() => setVersion((v) => v + 1), [])
+
+  useEffect(() => {
+    let cancelled = false
     fetch('/data/direborn-games.json')
       .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
       .then((g: Game[]) => { if (!cancelled) setGames(g) })
@@ -76,7 +96,16 @@ export function EventsProvider({ children }: { children: ReactNode }) {
     // Skip report scrims the team already logged in the app (same day, same opponent).
     const logged = new Set(teamEvents.filter((e) => e.type === 'scrim').map((e) => `${e.date}|${(e.opponent ?? '').toLowerCase()}`))
     const report = reportEvents().filter((e) => !logged.has(`${e.date}|${e.opponent!.toLowerCase()}`))
-    return sortEvents([...teamEvents, ...officialEvents(series), ...report])
+    // A match imported from Liquipedia and the same match in the built-in official list: keep one.
+    // Played matches with scoreboards keep the official version (richer popup); otherwise the imported one (kept up to date).
+    const norm = (s?: string) => (s ?? '').toLowerCase().replace(/\(.*?\)/g, '').replace(/[^a-z0-9]/g, '')
+    const official = officialEvents(series)
+    const imported = teamEvents.filter((e) => e.importedFrom)
+    const sameMatch = (a: CalendarEvent, b: CalendarEvent) => a.date === b.date && !!norm(a.opponent) && norm(a.opponent) === norm(b.opponent)
+    const richOfficial = (o: CalendarEvent) => !!o.seriesKey && (series.find((s) => s.key === o.seriesKey)?.games.length ?? 0) > 0
+    const keepOfficial = official.filter((o) => richOfficial(o) || !imported.some((i) => sameMatch(i, o)))
+    const team = teamEvents.filter((e) => !e.importedFrom || !keepOfficial.some((o) => richOfficial(o) && sameMatch(e, o)))
+    return sortEvents([...team, ...keepOfficial, ...report])
   }, [teamEvents, series])
 
   const add = useCallback(async (e: NewEvent) => {
@@ -113,8 +142,8 @@ export function EventsProvider({ children }: { children: ReactNode }) {
   const closeReport = useCallback(() => setReportKey(null), [])
 
   const value = useMemo(
-    () => ({ events, source, games, series, add, remove, update, openResult, resultFor, closeResult, openAdd, addDialog, closeAdd, openMatch, matchKey, closeMatch, openEvent, eventDetail, closeEvent, reportKey, closeReport }),
-    [events, source, games, series, add, remove, update, openResult, resultFor, closeResult, openAdd, addDialog, closeAdd, openMatch, matchKey, closeMatch, openEvent, eventDetail, closeEvent, reportKey, closeReport],
+    () => ({ events, source, games, series, tournaments, reload, add, remove, update, openResult, resultFor, closeResult, openAdd, addDialog, closeAdd, openMatch, matchKey, closeMatch, openEvent, eventDetail, closeEvent, reportKey, closeReport }),
+    [events, source, games, series, tournaments, reload, add, remove, update, openResult, resultFor, closeResult, openAdd, addDialog, closeAdd, openMatch, matchKey, closeMatch, openEvent, eventDetail, closeEvent, reportKey, closeReport],
   )
   return <EventsContext.Provider value={value}>{children}</EventsContext.Provider>
 }

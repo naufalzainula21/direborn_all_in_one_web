@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useEvents } from '../../data/events'
 import { useRole } from '../../lib/role'
+import { canAddAny, canEditEvent, canEnterResults } from '../../lib/permissions'
 import { countdown, parseDay } from '../../lib/format'
 import { TYPE_LABEL } from '../schedule/meta'
 import { dotabuffMatch } from '../../data/tournaments'
@@ -9,8 +10,9 @@ import { hasResult, isPast, outcomeOf, OUTCOME_LABEL, OUTCOME_TONE } from '../..
 /** Details for a team-added event (scrim, practice, other, tournament). */
 export function EventDialog() {
   const { eventDetail: e, closeEvent, remove, source, openAdd, openResult, update } = useEvents()
-  const { role } = useRole()
-  const canEdit = source === 'db' && role !== 'player'
+  const { role, user } = useRole()
+  const canEdit = source === 'db' && !!e && !e.source && canEditEvent(user, e)
+  const canScore = source === 'db' && canEnterResults(role)
   const ref = useRef<HTMLDialogElement>(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
@@ -37,11 +39,13 @@ export function EventDialog() {
     ...(start ? [['Starts', countdown(start, new Date()).replace('Live now', 'Started')] as [string, string]] : []),
     ...(e.opponent ? [['Opponent', e.opponent] as [string, string]] : []),
     ['Details', e.detail || '—'],
+    ...(e.addedBy ? [['Added by', e.addedBy] as [string, string]] : []),
+    ...(e.importedFrom ? [['Source', 'Liquipedia · updates automatically'] as [string, string]] : []),
     ...(e.status ? [['Status', e.status === 'confirmed' ? 'Confirmed' : e.status === 'pending' ? 'Pending' : 'Played'] as [string, string]] : []),
   ] : []
   const isScrim = e?.type === 'scrim'
   const outcome = e ? outcomeOf(e) : null
-  const canResult = !!e && isScrim && canEdit && (hasResult(e) || isPast(e, new Date()))
+  const canResult = !!e && isScrim && canScore && (hasResult(e) || isPast(e, new Date()))
   const confirm = async () => {
     if (!e) return
     setBusy(true); setError('')
@@ -98,7 +102,7 @@ export function EventDialog() {
               </button>
             ) : (
               <>
-                <button type="button" className="ghost-btn staff-only" onClick={() => { const d = e.date; closeEvent(); openAdd(d) }}>Add on this day</button>
+                {canAddAny(role) && <button type="button" className="ghost-btn" onClick={() => { const d = e.date; closeEvent(); openAdd(d) }}>Add on this day</button>}
                 <button type="button" className="btn btn--primary" onClick={closeEvent}>Done</button>
               </>
             )}

@@ -5,6 +5,8 @@ import { countdown, longToday, parseDay, todayISO } from '../lib/format'
 import { startISO } from '../lib/schedule'
 import { hasResult, isPast, opponentOf, outcomeOf, OUTCOME_LABEL, OUTCOME_TONE } from '../lib/scrims'
 import { Icon } from '../components/Icon'
+import { canAddType, canEnterResults } from '../lib/permissions'
+import { useRole } from '../lib/role'
 import { pct, reportNotes, reportPhases, reportSeries, reportSplits, phaseShort, type SplitRecord } from '../data/scrimReport'
 
 const PER_PAGE = 5
@@ -137,6 +139,7 @@ function ResultsPager({ list, today }: { list: CalendarEvent[]; today: string })
 
 export function Scrims({ now }: { now: Date }) {
   const { events, source, openAdd, openEvent, openResult } = useEvents()
+  const { role } = useRole()
   const today = todayISO(now)
   const scrims = useMemo(() => events.filter((e) => e.type === 'scrim'), [events])
 
@@ -175,9 +178,11 @@ export function Scrims({ now }: { now: Date }) {
           <span className="muted">{longToday(now)}</span>
           <h1 className="page-title">Scrims</h1>
         </div>
-        <button type="button" className="btn btn--primary" onClick={() => openAdd(today, 'scrim')}>
-          <Icon name="plus" size={16} strokeWidth={2.4} /><span className="btn__label">Book scrim</span>
-        </button>
+        {canAddType(role, 'scrim') && (
+          <button type="button" className="btn btn--primary" onClick={() => openAdd(today, 'scrim')}>
+            <Icon name="plus" size={16} strokeWidth={2.4} /><span className="btn__label">Book scrim</span>
+          </button>
+        )}
       </div>
       {source === 'offline' && <p className="notice">The shared database isn't reachable right now, so scrims can't load or save.</p>}
 
@@ -200,7 +205,7 @@ export function Scrims({ now }: { now: Date }) {
 
       <div className="home-grid">
         <div className="stack">
-          {needsResult.length > 0 && (
+          {needsResult.length > 0 && canEnterResults(role) && (
             <section className="card card--alert" aria-labelledby="needs-title">
               <div className="card__head">
                 <h2 id="needs-title" className="card__title">Needs a result</h2>
@@ -214,7 +219,7 @@ export function Scrims({ now }: { now: Date }) {
                       <span className="side-list__title">vs {opponentOf(e)}</span>
                       <span className="muted small">{e.time} WIB · {e.detail}</span>
                     </span>
-                    <button type="button" className="btn btn--primary btn--sm" onClick={() => openResult(e)}>Add result</button>
+                    {canEnterResults(role) && <button type="button" className="btn btn--primary btn--sm" onClick={() => openResult(e)}>Add result</button>}
                   </li>
                 ))}
               </ul>
@@ -228,8 +233,8 @@ export function Scrims({ now }: { now: Date }) {
             </div>
             {upcoming.length === 0 ? (
               <div className="empty">
-                <p>No scrims booked. Add one so the team knows when to be online.</p>
-                <button type="button" className="ghost-btn" onClick={() => openAdd(today, 'scrim')}>+ Book scrim</button>
+                <p>No scrims booked yet.</p>
+                {canAddType(role, 'scrim') && <button type="button" className="ghost-btn" onClick={() => openAdd(today, 'scrim')}>+ Book scrim</button>}
               </div>
             ) : (
               <ul className="side-list">

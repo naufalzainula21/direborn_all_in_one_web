@@ -60,11 +60,8 @@ export function CreativeHome({ now }: { now: Date }) {
           <h1 className="page-title">Creative planner</h1>
         </div>
         <div className="c-actions">
-          <button type="button" className="btn btn--primary" onClick={() => openAdd(today, 'tournament')}>
-            <Icon name="trophy" size={16} /><span className="btn__label">Tournament match</span>
-          </button>
-          <button type="button" className="btn btn--outline" onClick={() => openAdd(today, 'other')}>
-            <Icon name="sparkle" size={16} /><span className="btn__label">Activity</span>
+          <button type="button" className="btn btn--primary" onClick={() => openAdd(today, 'other')}>
+            <Icon name="sparkle" size={16} /><span className="btn__label">Add activity</span>
           </button>
         </div>
       </div>
